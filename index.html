@@ -1007,16 +1007,22 @@ built.forEach(({p,g,placed})=>{
   -webkit-tap-highlight-color:transparent;
   touch-action:none;user-select:none;
 ">
+  <button id="cp-drawmode" onclick="toggleDrawMode()" title="Toggle draw mode" style="width:36px;height:36px;border-radius:50%;border:2px solid rgba(255,255,255,0.4);background:rgba(255,255,255,0.1);color:#fff;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;touch-action:manipulation;">✏️</button>
+  <div style="width:1px;height:24px;background:rgba(255,255,255,0.12);flex-shrink:0;"></div>
   <button id="cp-pen" style="width:36px;height:36px;border-radius:50%;border:none;background:#C2613A;color:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;touch-action:manipulation;" title="Pen">✏️</button>
   <button id="cp-hl" style="width:36px;height:36px;border-radius:50%;border:none;background:rgba(255,255,255,0.1);color:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;touch-action:manipulation;" title="Highlighter">🖍️</button>
   <button id="cp-circle" style="width:36px;height:36px;border-radius:50%;border:none;background:rgba(255,255,255,0.1);color:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;touch-action:manipulation;" title="Circle word">⭕</button>
   <button id="cp-er" style="width:36px;height:36px;border-radius:50%;border:none;background:rgba(255,255,255,0.1);color:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;touch-action:manipulation;" title="Eraser">🧽</button>
   <div style="width:1px;height:24px;background:rgba(255,255,255,0.12);"></div>
-  <div id="cp-c1" data-c="#C2613A" style="width:20px;height:20px;border-radius:50%;background:#C2613A;cursor:pointer;border:2px solid #fff;-webkit-tap-highlight-color:transparent;touch-action:manipulation;"></div>
-  <div id="cp-c2" data-c="#1A1714" style="width:20px;height:20px;border-radius:50%;background:#1A1714;cursor:pointer;border:2px solid transparent;-webkit-tap-highlight-color:transparent;touch-action:manipulation;"></div>
-  <div id="cp-c3" data-c="#4A7C59" style="width:20px;height:20px;border-radius:50%;background:#4A7C59;cursor:pointer;border:2px solid transparent;-webkit-tap-highlight-color:transparent;touch-action:manipulation;"></div>
-  <div id="cp-c4" data-c="#3B6FA0" style="width:20px;height:20px;border-radius:50%;background:#3B6FA0;cursor:pointer;border:2px solid transparent;-webkit-tap-highlight-color:transparent;touch-action:manipulation;"></div>
-  <div id="cp-c5" data-c="#A63228" style="width:20px;height:20px;border-radius:50%;background:#A63228;cursor:pointer;border:2px solid transparent;-webkit-tap-highlight-color:transparent;touch-action:manipulation;"></div>
+  <div id="cp-c1" data-c="#C2613A" style="width:20px;height:20px;border-radius:50%;background:#C2613A;cursor:pointer;border:2px solid #fff;-webkit-tap-highlight-color:transparent;touch-action:manipulation;" onclick="pickColor(this)"></div>
+  <div id="cp-c2" data-c="#1A1714" style="width:20px;height:20px;border-radius:50%;background:#1A1714;cursor:pointer;border:2px solid transparent;-webkit-tap-highlight-color:transparent;touch-action:manipulation;" onclick="pickColor(this)"></div>
+  <div id="cp-c3" data-c="#4A7C59" style="width:20px;height:20px;border-radius:50%;background:#4A7C59;cursor:pointer;border:2px solid transparent;-webkit-tap-highlight-color:transparent;touch-action:manipulation;" onclick="pickColor(this)"></div>
+  <div id="cp-c4" data-c="#3B6FA0" style="width:20px;height:20px;border-radius:50%;background:#3B6FA0;cursor:pointer;border:2px solid transparent;-webkit-tap-highlight-color:transparent;touch-action:manipulation;" onclick="pickColor(this)"></div>
+  <div id="cp-c5" data-c="#A63228" style="width:20px;height:20px;border-radius:50%;background:#A63228;cursor:pointer;border:2px solid transparent;-webkit-tap-highlight-color:transparent;touch-action:manipulation;" onclick="pickColor(this)"></div>
+  <!-- Any colour picker -->
+  <label title="Pick any colour" style="width:20px;height:20px;border-radius:50%;overflow:hidden;cursor:pointer;border:2px solid rgba(255,255,255,0.3);flex-shrink:0;position:relative;display:flex;align-items:center;justify-content:center;background:conic-gradient(red,yellow,lime,cyan,blue,magenta,red);">
+    <input type="color" id="cp-custom-color" value="#ffffff" style="opacity:0;position:absolute;width:100%;height:100%;cursor:pointer;border:none;padding:0;" title="Pick any colour">
+  </label>
   <div style="width:1px;height:24px;background:rgba(255,255,255,0.12);"></div>
   <button id="cp-undo" style="width:36px;height:36px;border-radius:50%;border:none;background:rgba(255,255,255,0.1);color:#fff;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;touch-action:manipulation;" title="Undo">↩️</button>
   <button id="cp-save" style="width:36px;height:36px;border-radius:50%;border:none;background:rgba(255,255,255,0.1);color:#fff;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;touch-action:manipulation;" title="Save">💾</button>
@@ -1047,11 +1053,15 @@ var bar = document.getElementById('cp-bar');
 if(bar) setTimeout(function(){ bar.style.width = '100%'; }, 50);
 
 // -- INIT after puzzles render --
+var drawModeActive = false;
+
 function init(){
   var pages = document.querySelectorAll('.page');
   pages.forEach(function(page, i){
     var canvas = document.createElement('canvas');
-    canvas.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;z-index:50;touch-action:none;';
+    // Start with pointer-events none so scrolling works normally
+    // Drawing only activates when draw mode is on
+    canvas.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;z-index:50;touch-action:auto;pointer-events:none;';
     canvas.setAttribute('data-idx', i);
     page.style.position = 'relative';
     page.appendChild(canvas);
@@ -1319,6 +1329,35 @@ function setActive(id){
   });
 }
 
+function toggleDrawMode(){
+  drawModeActive = !drawModeActive;
+  var btn = document.getElementById('cp-drawmode');
+  var canvases = document.querySelectorAll('canvas[data-idx]');
+  if(drawModeActive){
+    // Enable drawing — block scroll on canvases
+    canvases.forEach(function(c){
+      c.style.touchAction = 'none';
+      c.style.pointerEvents = 'all';
+    });
+    if(btn){
+      btn.style.background = '#C2613A';
+      btn.style.border = '2px solid #fff';
+      btn.title = 'Drawing ON — tap to scroll';
+    }
+  } else {
+    // Disable drawing — allow scroll
+    canvases.forEach(function(c){
+      c.style.touchAction = 'auto';
+      c.style.pointerEvents = 'none';
+    });
+    if(btn){
+      btn.style.background = 'rgba(255,255,255,0.1)';
+      btn.style.border = '2px solid rgba(255,255,255,0.4)';
+      btn.title = 'Drawing OFF — tap to draw';
+    }
+  }
+}
+
 document.getElementById('cp-pen').onclick=function(){tool='pen';size=3;setActive('cp-pen');};
 document.getElementById('cp-hl').onclick=function(){tool='highlight';size=3;setActive('cp-hl');};
 document.getElementById('cp-circle').onclick=function(){tool='circle';size=3;setActive('cp-circle');};
@@ -1330,15 +1369,35 @@ document.getElementById('cp-clear').onclick=clearAll;
 ['cp-c1','cp-c2','cp-c3','cp-c4','cp-c5'].forEach(function(id){
   var el=document.getElementById(id);
   if(!el)return;
-  el.onclick=function(){
-    color=el.getAttribute('data-c');
+  el.onclick=function(){ pickColor(el); };
+});
+
+function pickColor(el){
+  color=el.getAttribute('data-c');
+  ['cp-c1','cp-c2','cp-c3','cp-c4','cp-c5'].forEach(function(cid){
+    var ce=document.getElementById(cid);
+    if(ce)ce.style.border=cid===el.id?'2px solid #fff':'2px solid transparent';
+  });
+  if(tool==='eraser'){tool='pen';setActive('cp-pen');}
+}
+
+// Custom colour picker
+var customPicker=document.getElementById('cp-custom-color');
+if(customPicker){
+  customPicker.addEventListener('input',function(){
+    color=this.value;
+    // Deselect all preset swatches
     ['cp-c1','cp-c2','cp-c3','cp-c4','cp-c5'].forEach(function(cid){
       var ce=document.getElementById(cid);
-      if(ce)ce.style.border=cid===id?'2px solid #fff':'2px solid transparent';
+      if(ce)ce.style.border='2px solid transparent';
     });
     if(tool==='eraser'){tool='pen';setActive('cp-pen');}
-  };
-});
+  });
+  customPicker.addEventListener('change',function(){
+    color=this.value;
+    if(tool==='eraser'){tool='pen';setActive('cp-pen');}
+  });
+}
 
 // Prevent toolbar scroll interference
 document.getElementById('cp-toolbar').addEventListener('touchmove',function(e){
