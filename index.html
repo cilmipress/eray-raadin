@@ -245,15 +245,33 @@
   .back-footer-brand{font-family:'Nunito',sans-serif;font-size:10px;font-weight:800;
     letter-spacing:5px;text-transform:uppercase;color:rgba(232,221,208,0.3);text-align:center;}
 
-  @media print{
-    body{background:white;}
-    .page{margin:0;box-shadow:none;width:100%;min-height:100vh;}
-    @page{margin:0;size:A4;}
-  }
+  /* ── SCREEN ── */
   @media screen{body{padding:24px 0;}}
+
+  /* ── PRINT — works at any paper size Chrome offers ── */
+  @media print{
+    *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important;}
+    html,body{margin:0!important;padding:0!important;background:white!important;}
+    #draw-toolbar,#cp-toolbar,#cp-loading,#cp-toast,#hs-prompt,
+    .draw-canvas,.grid-wm-inner{display:none!important;}
+    .page{
+      margin:0!important;box-shadow:none!important;border:none!important;
+      width:100%!important;min-height:auto!important;
+      page-break-after:always!important;
+      page-break-inside:avoid!important;
+      overflow:hidden!important;
+    }
+    .page:last-child{page-break-after:auto!important;}
+    .grid-branded::before,.grid-branded::after{display:block!important;}
+    .pbody{padding:5px 8px 4px!important;}
+    .grid-wrap{padding-bottom:4px!important;}
+    @page{margin:0;}
+  }
 </style>
 </head>
 <body>
+
+
 
 <!-- ═══════════════════════
      COVER PAGE
@@ -324,16 +342,16 @@
 
   <div class="cover-diff-row">
     <span class="cdiff e">
-      <span class="en">⬤ Easy · Puzzles 1, 3–5</span>
-      <span class="so">Fudud · Halxiraalaha 1, 3–5</span>
+      <span class="en">⬤ Easy · Puzzles 1–5</span>
+      <span class="so">Fudud · Halxiraalaha 1–5</span>
     </span>
     <span class="cdiff m">
       <span class="en">⬤ Medium · Puzzles 6–10</span>
       <span class="so">Dhexdhexaad · Halxiraalaha 6–10</span>
     </span>
     <span class="cdiff h">
-      <span class="en">⬤ Hard · Puzzles 2, 11–15</span>
-      <span class="so">Adag · Halxiraalaha 2, 11–15</span>
+      <span class="en">⬤ Hard · Puzzles 11–15</span>
+      <span class="so">Adag · Halxiraalaha 11–15</span>
     </span>
   </div>
 
@@ -485,7 +503,7 @@
     </div>
   </div>
 
-  <div class="piracy-brand" style="margin-top:22px;color:var(--muted);">Cilmi Press · cilmipress.com</div>
+  <div class="piracy-brand" style="margin-top:22px;color:var(--muted);">Cilmi Press · stan.store/cilmipress</div>
 </div>
 </div>
 
@@ -571,7 +589,7 @@
     </div>
   </div>
 
-  <div class="piracy-brand" style="margin-top:20px;color:var(--muted);">Cilmi Press · cilmipress.com</div>
+  <div class="piracy-brand" style="margin-top:20px;color:var(--muted);">Cilmi Press · stan.store/cilmipress</div>
 </div>
 </div>
 
@@ -664,10 +682,10 @@ const PUZZLES = [
    clues:  ["Happiness","Love","Hope","Confident","Calm / Peaceful","Sadness","Fear","Anger / Rage","Worry / Anxiety","Shock","Shyness","Compassion","Jealousy","Patience","Surprised"]},
 
   // ── P15: JOBS (HARD) ──────────────────────────────────
-  // WAARDIYE=Guard/Watchman, BOOLISKA=The Police, DARAWAL (not DIRAWAL), HILIBLE replaces HEESAA
+  // WAARDIYE=Guard/Watchman, BOOLIIS=Police, DARAWAL (not DIRAWAL), HILIBLE replaces HEESAA
   {num:15,somali:"SHAQOOYINKA",english:"Jobs & Professions",difficulty:"hard",
-   words:  ["GUDDOOMIYE","INJINEER","XISAABIYE","BEERALAY","TURJUME","NIJAAR","TUMAAL","RANJIILE","ROODHIILE","HILIBLE","DARAWAL","TAGSILE","WAARDIYE","BOOLISKA","ABUKAATE"],
-   clues:  ["Director","Engineer","Accountant","Farmer","Translator","Carpenter","Blacksmith","Painter","Baker","Butcher","Driver","Taxi Driver","Guard / Watchman","The Police","Lawyer"]}
+   words:  ["GUDDOOMIYE","INJINEER","XISAABIYE","BEERALAY","TURJUME","NIJAAR","TUMAAL","RANJIILE","ROODHIILE","HILIBLE","DARAWAL","TAGSILE","WAARDIYE","BOOLIIS","ABUKAATE"],
+   clues:  ["Director","Engineer","Accountant","Farmer","Translator","Carpenter","Blacksmith","Painter","Baker","Butcher","Driver","Taxi Driver","Guard / Watchman","Police","Lawyer"]}
 ];
 
 // ═══════════════════════════════════════════════════════
@@ -805,7 +823,7 @@ function wbank(puzzle){
   </div>` : '';
   return `<div class="wbank">
     <div class="wbank-title">Erayada La Raadsanayo · Word Bank</div>
-    <div class="wbank-wm">PROPERTY OF CILMI PRESS &nbsp;·&nbsp; HANTIDA CILMI PRESS</div>
+    <div class="wbank-wm">STAN.STORE/CILMIPRESS &nbsp;·&nbsp; STAN.STORE/CILMIPRESS &nbsp;·&nbsp; STAN.STORE/CILMIPRESS</div>
     <div class="wbank-items">${items}</div>${footnote}${famFootnote}</div>`;
 }
 
@@ -918,7 +936,7 @@ backPage.innerHTML = `
     <div class="back-message-row">
       <div class="back-col-en">
         ⭐ <strong>Please leave us a review.</strong>
-        It is how we know what we are doing well and what we need to improve. Every review — big or small — helps us make better books for this community.
+        This is how we know what we are doing well and what we need to improve. Every review — big or small — helps us make better books for this community.
       </div>
       <div class="back-col-so">
         ⭐ <strong>Fadlan noo akhri dib-u-eegis.</strong>
@@ -927,7 +945,7 @@ backPage.innerHTML = `
     </div>
   </div>
 
-  <div class="back-footer-brand">Cilmi Press · cilmipress.com · © 2026</div>
+  <div class="back-footer-brand">Cilmi Press · stan.store/cilmipress · © 2026</div>
 
 </div>`;
 document.body.appendChild(backPage);
@@ -955,6 +973,382 @@ built.forEach(({p,g,placed})=>{
     ${footer()}`;
   document.body.appendChild(pg);
 });
+</script>
+
+<!-- CILMI PRESS DRAWING TOOLKIT -->
+
+<!-- Loading screen -->
+<div id="cp-loading" style="position:fixed;inset:0;background:#2C2825;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;transition:opacity 0.4s;">
+  <svg width="60" height="60" viewBox="0 0 220 230">
+    <circle cx="110" cy="74" r="68" fill="none" stroke="rgba(194,97,58,0.5)" stroke-width="2"/>
+    <path d="M110 44 Q93 40 71 45 L71 102 Q93 98 110 102 Z" fill="none" stroke="rgba(232,221,208,0.8)" stroke-width="3.5" stroke-linejoin="round"/>
+    <path d="M110 44 Q127 40 149 45 L149 102 Q127 98 110 102 Z" fill="rgba(194,97,58,0.22)"/>
+    <line x1="80" y1="60" x2="104" y2="59" stroke="#C2613A" stroke-width="2" stroke-linecap="round"/>
+    <line x1="80" y1="70" x2="104" y2="69" stroke="#C2613A" stroke-width="2" stroke-linecap="round"/>
+    <line x1="80" y1="80" x2="104" y2="79" stroke="#C2613A" stroke-width="2" stroke-linecap="round"/>
+    <line x1="110" y1="43" x2="110" y2="103" stroke="#C2613A" stroke-width="5" stroke-linecap="round"/>
+    <path d="M110 44 A20 20 0 0 1 110 84" stroke="#C2613A" stroke-width="5" fill="none" stroke-linecap="round"/>
+  </svg>
+  <div style="color:#FAF7F3;font-family:Georgia,serif;font-size:22px;font-weight:800;">Eray Raadin</div>
+  <div style="color:rgba(255,255,255,0.4);font-size:11px;letter-spacing:2px;text-transform:uppercase;">Cilmi Press · Loading…</div>
+  <div style="width:140px;height:3px;background:rgba(255,255,255,0.1);border-radius:2px;overflow:hidden;">
+    <div id="cp-bar" style="height:100%;background:#C2613A;border-radius:2px;width:0%;transition:width 1s ease;"></div>
+  </div>
+</div>
+
+<!-- Floating toolbar -->
+<div id="cp-toolbar" style="
+  position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+  background:#1A1714;border-radius:50px;
+  padding:9px 14px;display:flex;align-items:center;gap:8px;
+  box-shadow:0 6px 28px rgba(0,0,0,0.5);z-index:9999;
+  border:1px solid rgba(255,255,255,0.08);
+  opacity:0;transition:opacity 0.4s;
+  -webkit-tap-highlight-color:transparent;
+  touch-action:none;user-select:none;
+">
+  <button id="cp-pen" style="width:36px;height:36px;border-radius:50%;border:none;background:#C2613A;color:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;touch-action:manipulation;" title="Pen">✏️</button>
+  <button id="cp-hl" style="width:36px;height:36px;border-radius:50%;border:none;background:rgba(255,255,255,0.1);color:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;touch-action:manipulation;" title="Highlighter">🖍️</button>
+  <button id="cp-circle" style="width:36px;height:36px;border-radius:50%;border:none;background:rgba(255,255,255,0.1);color:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;touch-action:manipulation;" title="Circle word">⭕</button>
+  <button id="cp-er" style="width:36px;height:36px;border-radius:50%;border:none;background:rgba(255,255,255,0.1);color:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;touch-action:manipulation;" title="Eraser">🧽</button>
+  <div style="width:1px;height:24px;background:rgba(255,255,255,0.12);"></div>
+  <div id="cp-c1" data-c="#C2613A" style="width:20px;height:20px;border-radius:50%;background:#C2613A;cursor:pointer;border:2px solid #fff;-webkit-tap-highlight-color:transparent;touch-action:manipulation;"></div>
+  <div id="cp-c2" data-c="#1A1714" style="width:20px;height:20px;border-radius:50%;background:#1A1714;cursor:pointer;border:2px solid transparent;-webkit-tap-highlight-color:transparent;touch-action:manipulation;"></div>
+  <div id="cp-c3" data-c="#4A7C59" style="width:20px;height:20px;border-radius:50%;background:#4A7C59;cursor:pointer;border:2px solid transparent;-webkit-tap-highlight-color:transparent;touch-action:manipulation;"></div>
+  <div id="cp-c4" data-c="#3B6FA0" style="width:20px;height:20px;border-radius:50%;background:#3B6FA0;cursor:pointer;border:2px solid transparent;-webkit-tap-highlight-color:transparent;touch-action:manipulation;"></div>
+  <div id="cp-c5" data-c="#A63228" style="width:20px;height:20px;border-radius:50%;background:#A63228;cursor:pointer;border:2px solid transparent;-webkit-tap-highlight-color:transparent;touch-action:manipulation;"></div>
+  <div style="width:1px;height:24px;background:rgba(255,255,255,0.12);"></div>
+  <button id="cp-undo" style="width:36px;height:36px;border-radius:50%;border:none;background:rgba(255,255,255,0.1);color:#fff;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;touch-action:manipulation;" title="Undo">↩️</button>
+  <button id="cp-save" style="width:36px;height:36px;border-radius:50%;border:none;background:rgba(255,255,255,0.1);color:#fff;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;touch-action:manipulation;" title="Save">💾</button>
+  <button id="cp-clear" style="width:36px;height:36px;border-radius:50%;border:none;background:rgba(255,255,255,0.1);color:#fff;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;touch-action:manipulation;" title="Clear all">🗑️</button>
+</div>
+
+<!-- Saved toast -->
+<div id="cp-toast" style="position:fixed;bottom:78px;left:50%;transform:translateX(-50%);background:#4A7C59;color:#fff;font-size:12px;font-weight:700;padding:6px 16px;border-radius:20px;z-index:9998;opacity:0;transition:opacity 0.3s;pointer-events:none;white-space:nowrap;">✅ Progress saved</div>
+
+<script>
+(function(){
+'use strict';
+
+const STORE = 'cp_er_v2';
+var tool = 'pen';
+var color = '#C2613A';
+var size = 3;
+var drawing = false;
+var startX = 0, startY = 0, lastX = 0, lastY = 0;
+var canvases = [];
+var snapshots = {}; // {index: [dataURL,...]}
+var currentCanvas = null;
+var currentCtx = null;
+var currentIndex = -1;
+
+// -- LOADING --
+var bar = document.getElementById('cp-bar');
+if(bar) setTimeout(function(){ bar.style.width = '100%'; }, 50);
+
+// -- INIT after puzzles render --
+function init(){
+  var pages = document.querySelectorAll('.page');
+  pages.forEach(function(page, i){
+    var canvas = document.createElement('canvas');
+    canvas.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;z-index:50;touch-action:none;';
+    canvas.setAttribute('data-idx', i);
+    page.style.position = 'relative';
+    page.appendChild(canvas);
+
+    function sizeIt(){
+      var prev = canvas.toDataURL();
+      canvas.width = page.offsetWidth;
+      canvas.height = page.offsetHeight;
+      if(prev !== 'data:,'){
+        var img = new Image();
+        img.onload = function(){ canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height); };
+        img.src = prev;
+      }
+    }
+    sizeIt();
+    window.addEventListener('resize', sizeIt);
+    snapshots[i] = [];
+    saveSnap(canvas, i);
+    canvases.push(canvas);
+
+    // Pointer events - work on ALL browsers including Safari iOS 13+
+    canvas.addEventListener('pointerdown', function(e){ onStart(e, canvas, i); }, {passive:false});
+    canvas.addEventListener('pointermove', function(e){ onMove(e, canvas, i); }, {passive:false});
+    canvas.addEventListener('pointerup', function(e){ onEnd(e, canvas, i); }, {passive:false});
+    canvas.addEventListener('pointercancel', function(e){ onEnd(e, canvas, i); }, {passive:false});
+    // Touch fallbacks — guarantee drawing works in Safari and in-app browsers
+    canvas.addEventListener('touchstart', function(e){
+      e.preventDefault();
+      var t=e.touches[0];
+      onStart({clientX:t.clientX,clientY:t.clientY,pointerId:1,preventDefault:function(){},target:canvas}, canvas, i);
+    }, {passive:false});
+    canvas.addEventListener('touchmove', function(e){
+      e.preventDefault();
+      var t=e.touches[0];
+      onMove({clientX:t.clientX,clientY:t.clientY,pointerId:1,preventDefault:function(){},target:canvas}, canvas, i);
+    }, {passive:false});
+    canvas.addEventListener('touchend', function(e){
+      e.preventDefault();
+      var t=e.changedTouches[0];
+      onEnd({clientX:t.clientX,clientY:t.clientY,pointerId:1,preventDefault:function(){},target:canvas}, canvas, i);
+    }, {passive:false});
+  });
+
+  // Show toolbar
+  var tb = document.getElementById('cp-toolbar');
+  if(tb) tb.style.opacity = '1';
+
+  // Hide loading
+  var ls = document.getElementById('cp-loading');
+  if(ls){
+    ls.style.opacity = '0';
+    setTimeout(function(){ if(ls.parentNode) ls.parentNode.removeChild(ls); }, 450);
+  }
+
+  // Restore saved drawings
+  restoreAll();
+}
+
+// -- COORDINATES --
+function getXY(e, canvas){
+  var rect = canvas.getBoundingClientRect();
+  var sx = canvas.width / rect.width;
+  var sy = canvas.height / rect.height;
+  var cx, cy;
+  if(e.clientX !== undefined){
+    cx = e.clientX; cy = e.clientY;
+  } else if(e.touches && e.touches.length){
+    cx = e.touches[0].clientX; cy = e.touches[0].clientY;
+  } else {
+    cx = e.changedTouches[0].clientX; cy = e.changedTouches[0].clientY;
+  }
+  return { x:(cx-rect.left)*sx, y:(cy-rect.top)*sy };
+}
+
+// -- DRAW EVENTS --
+function onStart(e, canvas, idx){
+  e.preventDefault();
+  if(e.pointerId && canvas.setPointerCapture) canvas.setPointerCapture(e.pointerId);
+  drawing = true;
+  currentCanvas = canvas;
+  currentCtx = canvas.getContext('2d');
+  currentIndex = idx;
+  var p = getXY(e, canvas);
+  startX = lastX = p.x;
+  startY = lastY = p.y;
+  saveSnap(canvas, idx);
+
+  var ctx = currentCtx;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+
+  if(tool === 'pen'){
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.globalAlpha = 1;
+    ctx.strokeStyle = color;
+    ctx.lineWidth = size;
+    ctx.beginPath();
+    ctx.moveTo(p.x, p.y);
+  } else if(tool === 'highlight'){
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.globalAlpha = 0.25;
+    ctx.strokeStyle = color;
+    ctx.lineWidth = size * 8;
+    ctx.beginPath();
+    ctx.moveTo(p.x, p.y);
+  } else if(tool === 'eraser'){
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.globalAlpha = 1;
+    ctx.lineWidth = size * 8;
+    ctx.beginPath();
+    ctx.moveTo(p.x, p.y);
+  }
+}
+
+function onMove(e, canvas, idx){
+  if(!drawing || currentCanvas !== canvas) return;
+  e.preventDefault();
+  var p = getXY(e, canvas);
+  var ctx = currentCtx;
+
+  if(tool === 'circle'){
+    // Redraw from last snapshot for circle preview
+    var snaps = snapshots[idx];
+    if(snaps && snaps.length){
+      var img = new Image();
+      var snap = snaps[snaps.length-1];
+      var cw = canvas.width, ch = canvas.height;
+      img.onload = function(){
+        ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';
+        ctx.clearRect(0,0,cw,ch);
+        ctx.drawImage(img,0,0);
+        drawEllipse(ctx, startX, startY, p.x, p.y, color, size, 0.7);
+      };
+      img.src = snap;
+    }
+    return;
+  }
+
+  ctx.lineTo(p.x, p.y);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(p.x, p.y);
+  lastX = p.x; lastY = p.y;
+}
+
+function onEnd(e, canvas, idx){
+  if(!drawing || currentCanvas !== canvas) return;
+  e.preventDefault();
+  var p = getXY(e, canvas);
+  var ctx = currentCtx;
+
+  if(tool === 'circle'){
+    ctx.globalAlpha = 1;
+    ctx.globalCompositeOperation = 'source-over';
+    drawEllipse(ctx, startX, startY, p.x, p.y, color, size, 1);
+  }
+
+  ctx.globalAlpha = 1;
+  ctx.globalCompositeOperation = 'source-over';
+  ctx.beginPath();
+  drawing = false;
+
+  // Auto-save debounced
+  clearTimeout(window._cpSaveTimer);
+  window._cpSaveTimer = setTimeout(saveAll, 800);
+}
+
+function drawEllipse(ctx, x1, y1, x2, y2, col, sz, alpha){
+  var cx=(x1+x2)/2, cy=(y1+y2)/2;
+  var rx=Math.max(Math.abs(x2-x1)/2,4);
+  var ry=Math.max(Math.abs(y2-y1)/2,4);
+  ctx.save();
+  ctx.globalAlpha=alpha;
+  ctx.strokeStyle=col;
+  ctx.lineWidth=sz+1;
+  ctx.lineCap='round';
+  ctx.beginPath();
+  ctx.ellipse(cx,cy,rx,ry,0,0,Math.PI*2);
+  ctx.stroke();
+  ctx.restore();
+}
+
+// -- SNAPSHOTS (undo) --
+function saveSnap(canvas, idx){
+  if(!snapshots[idx]) snapshots[idx]=[];
+  snapshots[idx].push(canvas.toDataURL());
+  if(snapshots[idx].length > 20) snapshots[idx].shift();
+}
+
+function undo(){
+  if(!currentCanvas||currentIndex<0) return;
+  var snaps = snapshots[currentIndex];
+  if(!snaps||snaps.length<=1) return;
+  snaps.pop();
+  var img = new Image();
+  var snap = snaps[snaps.length-1];
+  var cw=currentCanvas.width, ch=currentCanvas.height;
+  img.onload=function(){
+    currentCtx.clearRect(0,0,cw,ch);
+    currentCtx.drawImage(img,0,0);
+  };
+  img.src=snap;
+}
+
+// -- STORAGE --
+function saveAll(){
+  try{
+    var data={};
+    canvases.forEach(function(c,i){
+      var b=document.createElement('canvas');
+      b.width=c.width;b.height=c.height;
+      var d=c.toDataURL('image/webp',0.5);
+      if(d!==b.toDataURL()) data[i]=d;
+    });
+    if(Object.keys(data).length){
+      localStorage.setItem(STORE, JSON.stringify(data));
+      showToast();
+    }
+  }catch(e){}
+}
+
+function restoreAll(){
+  try{
+    var raw=localStorage.getItem(STORE);
+    if(!raw)return;
+    var data=JSON.parse(raw);
+    Object.keys(data).forEach(function(i){
+      var c=canvases[parseInt(i)];
+      if(!c)return;
+      var img=new Image();
+      img.onload=function(){
+        c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+      };
+      img.src=data[i];
+    });
+  }catch(e){}
+}
+
+function clearAll(){
+  if(!confirm('Clear all drawings? Dhammaan sawirrada waa la tirtiri doonaa.'))return;
+  canvases.forEach(function(c){
+    c.getContext('2d').clearRect(0,0,c.width,c.height);
+  });
+  try{localStorage.removeItem(STORE);}catch(e){}
+  snapshots={};
+  canvases.forEach(function(c,i){
+    snapshots[i]=[];
+    saveSnap(c,i);
+  });
+}
+
+function showToast(){
+  var t=document.getElementById('cp-toast');
+  if(!t)return;
+  t.style.opacity='1';
+  clearTimeout(window._cpToast);
+  window._cpToast=setTimeout(function(){t.style.opacity='0';},1800);
+}
+
+// -- TOOL BUTTONS --
+function setActive(id){
+  ['cp-pen','cp-hl','cp-circle','cp-er'].forEach(function(bid){
+    var b=document.getElementById(bid);
+    if(b) b.style.background = bid===id ? '#C2613A' : 'rgba(255,255,255,0.1)';
+  });
+}
+
+document.getElementById('cp-pen').onclick=function(){tool='pen';size=3;setActive('cp-pen');};
+document.getElementById('cp-hl').onclick=function(){tool='highlight';size=3;setActive('cp-hl');};
+document.getElementById('cp-circle').onclick=function(){tool='circle';size=3;setActive('cp-circle');};
+document.getElementById('cp-er').onclick=function(){tool='eraser';size=4;setActive('cp-er');};
+document.getElementById('cp-undo').onclick=undo;
+document.getElementById('cp-save').onclick=function(){saveAll();};
+document.getElementById('cp-clear').onclick=clearAll;
+
+['cp-c1','cp-c2','cp-c3','cp-c4','cp-c5'].forEach(function(id){
+  var el=document.getElementById(id);
+  if(!el)return;
+  el.onclick=function(){
+    color=el.getAttribute('data-c');
+    ['cp-c1','cp-c2','cp-c3','cp-c4','cp-c5'].forEach(function(cid){
+      var ce=document.getElementById(cid);
+      if(ce)ce.style.border=cid===id?'2px solid #fff':'2px solid transparent';
+    });
+    if(tool==='eraser'){tool='pen';setActive('cp-pen');}
+  };
+});
+
+// Prevent toolbar scroll interference
+document.getElementById('cp-toolbar').addEventListener('touchmove',function(e){
+  e.stopPropagation();
+},{passive:false});
+
+// -- START --
+setTimeout(init, 900);
+
+})();
 </script>
 </body>
 </html>
