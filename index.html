@@ -2,8 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Eray Raadin — Buugga Raadinta Erayada Af Soomaaliga (15 Halxiraale)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Eray Raadin">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#2C2825">
+<title>Eray Raadin — Cilmi Press</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Playfair+Display:wght@700;900&display=swap');
   :root {
@@ -245,33 +250,101 @@
   .back-footer-brand{font-family:'Nunito',sans-serif;font-size:10px;font-weight:800;
     letter-spacing:5px;text-transform:uppercase;color:rgba(232,221,208,0.3);text-align:center;}
 
-  /* ── SCREEN ── */
-  @media screen{body{padding:24px 0;}}
-
-  /* ── PRINT — works at any paper size Chrome offers ── */
-  @media print{
-    *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important;}
-    html,body{margin:0!important;padding:0!important;background:white!important;}
-    #draw-toolbar,#cp-toolbar,#cp-loading,#cp-toast,#hs-prompt,
-    .draw-canvas,.grid-wm-inner{display:none!important;}
-    .page{
-      margin:0!important;box-shadow:none!important;border:none!important;
-      width:100%!important;min-height:auto!important;
-      page-break-after:always!important;
-      page-break-inside:avoid!important;
-      overflow:hidden!important;
-    }
-    .page:last-child{page-break-after:auto!important;}
-    .grid-branded::before,.grid-branded::after{display:block!important;}
-    .pbody{padding:5px 8px 4px!important;}
-    .grid-wrap{padding-bottom:4px!important;}
-    @page{margin:0;}
+  /* ── LOADING SCREEN — shows instantly, hides when puzzles ready ── */
+  /* ── HOME SCREEN PROMPT (iOS) ── */
+  #hs-prompt{
+    position:fixed;bottom:0;left:0;right:0;
+    background:#1A1714;border-top:1px solid rgba(255,255,255,0.1);
+    padding:14px 20px 28px;z-index:9998;
+    transform:translateY(100%);transition:transform 0.35s ease;
+    display:flex;align-items:center;gap:14px;
   }
+  #hs-prompt.show{transform:translateY(0);}
+  .hs-icon{width:44px;height:44px;background:#C2613A;border-radius:10px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:22px;flex-shrink:0;}
+  .hs-text{flex:1;}
+  .hs-title{color:#FAF7F3;font-size:13px;font-weight:700;margin-bottom:3px;}
+  .hs-desc{color:rgba(255,255,255,0.45);font-size:11px;line-height:1.4;}
+  .hs-close{color:rgba(255,255,255,0.35);font-size:20px;cursor:pointer;
+    padding:8px;flex-shrink:0;}
+
+  /* Floating toolbar */
+  #draw-toolbar{
+    position:fixed;bottom:22px;left:50%;transform:translateX(-50%);
+    background:#1A1714;border-radius:50px;
+    padding:10px 16px;display:flex;align-items:center;gap:10px;
+    box-shadow:0 8px 32px rgba(0,0,0,0.45);z-index:9999;
+    touch-action:none;user-select:none;
+    border:1px solid rgba(255,255,255,0.08);
+  }
+  .tb-btn{
+    width:38px;height:38px;border-radius:50%;border:none;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    font-size:17px;background:rgba(255,255,255,0.08);color:#FAF7F3;
+    transition:all 0.15s;position:relative;touch-action:manipulation;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .tb-btn:active,.tb-btn.active{background:#C2613A;transform:scale(0.93);}
+  .tb-btn.active{background:#C2613A;}
+  .tb-sep{width:1px;height:26px;background:rgba(255,255,255,0.12);flex-shrink:0;}
+  .tb-label{font-size:9px;font-weight:700;letter-spacing:1px;
+    text-transform:uppercase;color:rgba(255,255,255,0.35);}
+
+  /* Colour swatches */
+  .tb-colors{display:flex;gap:6px;align-items:center;}
+  .tb-color{width:22px;height:22px;border-radius:50%;cursor:pointer;border:2px solid transparent;
+    transition:all 0.15s;touch-action:manipulation;-webkit-tap-highlight-color:transparent;}
+  .tb-color.selected{border-color:#FAF7F3;transform:scale(1.15);}
+
+  /* Size selector */
+  .tb-sizes{display:flex;gap:5px;align-items:center;}
+  .tb-size{border-radius:50%;background:rgba(255,255,255,0.55);cursor:pointer;
+    transition:all 0.15s;touch-action:manipulation;flex-shrink:0;}
+  .tb-size.selected{background:#FAF7F3;box-shadow:0 0 0 2px #C2613A;}
+
+  /* Canvas overlay — sits over each page, transparent, captures drawing */
+  .draw-canvas{
+    position:absolute;top:0;left:0;width:100%;height:100%;
+    z-index:100;touch-action:none;cursor:crosshair;
+    pointer-events:none; /* enabled only when drawing mode active */
+  }
+  .draw-canvas.draw-active{pointer-events:all;}
+
+  /* When drawing mode on, disable text selection on page */
+  body.drawing-mode{user-select:none;-webkit-user-select:none;}
+  body.drawing-mode .page{cursor:crosshair;}
+
+  /* Toolbar tooltip */
+  .tb-btn[data-tip]:hover::after{
+    content:attr(data-tip);position:absolute;bottom:calc(100% + 8px);
+    left:50%;transform:translateX(-50%);
+    background:#000;color:#fff;font-size:10px;font-weight:600;
+    padding:3px 8px;border-radius:4px;white-space:nowrap;pointer-events:none;
+  }
+
+  @media print{
+    #draw-toolbar{display:none!important;}
+    .draw-canvas{display:none!important;}
+  }
+
+
 </style>
 </head>
 <body>
 
+<!-- Loading screen — shows instantly while puzzles generate -->
 
+
+<!-- iOS Add to Home Screen prompt -->
+<div id="hs-prompt">
+  <div class="hs-icon">📖</div>
+  <div class="hs-text">
+    <div class="hs-title">Add to your Home Screen</div>
+    <div class="hs-desc">Tap the share button ↑ then "Add to Home Screen" for instant access like an app</div>
+  </div>
+  <div class="hs-close" onclick="dismissPrompt()">✕</div>
+</div>
 
 <!-- ═══════════════════════
      COVER PAGE
@@ -357,7 +430,7 @@
 
   <div class="cover-tags">
     <div class="ctag">Family<span class="so">Qoyska</span></div>
-    <div class="ctag">Home<span class="so">Guriga</span></div>
+    <div class="ctag">Greetings<span class="so">Salaamaha</span></div>
     <div class="ctag">Numbers<span class="so">Tirooyin</span></div>
     <div class="ctag">Colours<span class="so">Midabada</span></div>
     <div class="ctag">School<span class="so">Dugsiga</span></div>
@@ -599,101 +672,106 @@
 // ═══════════════════════════════════════════════════════
 const PUZZLES = [
 
-  // ── P1: FAMILY (EASY) ─────────────────────────────────
+  // -- P1: FAMILY (EASY) ---------------------------------
   // QOYS+REER replaced with INAABTI+INAADEER (cousins), grouped logically
   {num:1,somali:"QOYSKA",english:"Family",difficulty:"easy",
-   words:  ["HOOYO","AABO","AYEEYO","AWOOWE","CUNUG","WIIL","GABAR","ILMO","WALAAL","INAABTI","INAADEER","ADEER","EEDDO","ABTI","HABARYAR"],
-   display:["HOOYO","AABO","AYEEYO","AWOOWE","CUNUG","WIIL","GABAR","ILMO","WALAAL","INAABTI *","INAADEER *","ADEER *","EEDDO *","ABTI *","HABARYAR *"],
-   clues:  ["Mother","Father","Grandmother","Grandfather","Baby","Boy","Girl","Child","Sibling","Maternal Cousin","Paternal Cousin","Uncle (pat.)","Aunt (pat.)","Uncle (mat.)","Aunt (mat.)"]},
+   words:  ["HOOYO","AABO","AYEEYO","AWOOWE","WALAAL","WIIL","GABAR","INAABTI","INAADEER","ILMO","CUNUG","ADEER","EEDDO","ABTI","HABARYAR"],
+   display:["HOOYO","AABO","AYEEYO","AWOOWE","WALAAL","WIIL","GABAR","INAABTI *","INAADEER *","ILMO","CUNUG","ADEER *","EEDDO *","ABTI *","HABARYAR *"],
+   clues:  ["Mother","Father","Grandmother","Grandfather","Sibling","Boy","Girl","Maternal Cousin","Paternal Cousin","Child","Baby","Uncle (pat.)","Aunt (pat.)","Uncle (mat.)","Aunt (mat.)"]},
 
-  // ── P2: THE HOME (EASY) ───────────────────────────────
-  {num:2,somali:"GURIGA",english:"The Home",difficulty:"easy",
-   words:  ["QOL","JIKO","MUSQUL","DAAH","FADHI","DAAQAD","DARBI","SAQAF","SAGXAD","ARMAAJO","BARKIN","BUSTE","BEER","MURAAYAD","KATABBAAN"],
-   clues:  ["Room","Kitchen","Toilet / Bathroom","Curtain","Sitting Room","Window","Wall","Ceiling","Floor","Wardrobe","Pillow","Blanket","Garden","Mirror","Bedroom"]},
+  // -- P2: GREETINGS (EASY) ------------------------------
+  // ISKA → ISKAAWARAN (display as ISKA WARAN)
+  {num:2,somali:"SALAAMAHA",english:"Greetings",difficulty:"easy",
+   words:  ["NABAD","MAHADSANID","SUBAX","GALAB","HABEEN","HAYE","MAYA","ISKAAWARAN","SIDEE","MAXAA","XAGEE","GOORMA","SALAAN","NABADGELYO","SOODHAWOOW"],
+   display:["NABAD","MAHAD SANID *","SUBAX","GALAB","HABEEN","HAYE","MAYA","ISKA WARAN *","SIDEE","MAXAA","XAGEE","GOORMA","SALAAN","NABAD GELYO *","SOO DHAWOOW *"],
+   clues:  ["Peace / Hello","Thank You","Morning","Afternoon","Night","Yes","No","How are you","How","What","Where","When","Greeting","Goodbye","Welcome"]},
 
+  // -- P3: NUMBERS (EASY) --------------------------------
   {num:3,somali:"TIROOYIN",english:"Numbers",difficulty:"easy",
    words:  ["KOW","LABO","SADDEX","AFAR","SHAN","LIX","TODDOBA","SIDEED","SAGAAL","TOBAN","KONTON","BOQOL","MALYUUN","BILYAN","TIRI"],
    clues:  ["One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Fifty","Hundred","Million","Billion","Count"]},
 
-  // ── P4: COLOURS (EASY) ────────────────────────────────
+  // -- P4: COLOURS (EASY) --------------------------------
   // LACAG→NAXAAS bronze, CAGAARAN removed, QALIN=silver (flag for speaker)
   // SILVER is confirmed LACAG in Somali; QALIN=pen — keep LACAG for silver
   // Remove CAGAARAN, add NAXAAS (bronze) — 6 letters, unique
   {num:4,somali:"MIDABADA",english:"Colours",difficulty:"easy",
-   words:  ["CAD","MADOW","GUDUUD","JAALLO","ORANJI","CAGAAR","BULUUG","BASALI","CARJAAWIIS","BUNNI","DAHAB","LACAG","NAXAAS","DAMEERI","MIDAB"],
-   clues:  ["White","Black","Red","Yellow","Orange","Green","Blue","Pink","Purple","Brown","Gold","Silver","Bronze / Copper","Grey","Colour"]},
+   words:  ["CAD","MADOW","JAALLE","CAGAAR","BULUUG","BUNNI","DAHAB","LACAG","MIDAB","GUDUUD","ORANJI","DAMEERI","BASALI","CARJAAWIIS","NAXAAS"],
+   clues:  ["White","Black","Yellow","Green","Blue","Brown","Gold","Silver","Colour","Red","Orange","Grey","Pink","Purple","Bronze / Copper"]},
 
-  // ── P5: SCHOOL (EASY) ─────────────────────────────────
+  // -- P5: SCHOOL (EASY) ---------------------------------
+  // Removed definite articles from English clues to match Somali root forms
+  // ARDAYGA=Student (not "The Student"), FASALKA=Classroom (not "The Classroom") etc.
   {num:5,somali:"DUGSIGA",english:"School",difficulty:"easy",
-   words:  ["MACALLIN","ARDAY","DUGSI","FASAL","KURSI","MIIS","BUUG","QALIN","IMTIXAAN","CASHAR","GAL","AKHRIS","QORAAL","SABUURAD","XAALADA"],
-   clues:  ["Teacher","Student","School","Classroom","Chair","Desk / Table","Book","Pen / Pencil","Exam / Test","Lesson","Folder","Reading","Writing","Blackboard","Grade / Result"]},
+   words:  ["MACALLIN","ARDAYGA","FASALKA","BUUG","QALINKA","MIISKA","KURSI","DUGSIGA","IMTIXAAN","CASHARKA","XISAAB","AKHRIS","QORAAL","SAACAD","XAALADDA"],
+   clues:  ["Teacher","Student","Classroom","Book","Pen / Pencil","Desk / Table","Chair","School","Exam / Test","Lesson","Maths","Reading","Writing","Time / Hour","Grade / Result"]},
 
-  // ── P6: CLOTHES (EASY — new) ──────────────────────────
+  // -- P6: CLOTHES (EASY — new) --------------------------
   // Best 15 from verified list — mix of men's, women's, universal
   {num:6,somali:"DHARKA",english:"Clothes",difficulty:"medium",
-   words:  ["SHAATI","FUNAANAD","BAATI","JAAKAD","XIJAAB","SURWAAL","GOONOO","KABO","DACAS","KOOFIYAD","MASAR","JIINIS","NIGIS","MACAWIIS","DIRAC"],
-   clues:  ["Shirt","T-shirt","House Dress","Jacket","Hijab","Trousers","Skirt","Shoes","Slippers / Sliders","Hat","Scarf","Jeans","Underwear","Cloth wrap (men's)","Dress"]},
+   words:  ["SHAADH","SURWAAL","KOODH","KAB","KOOFIYAD","MASAR","JIINIS","BAATI","XIJAAB","DALLAD","GUNTIINO","GARAN","KALSON","MACAWIIS","SHANDAD"],
+   clues:  ["Shirt","Trousers","Jacket / Coat","Shoes","Hat","Scarf","Jeans","Dress","Hijab","Umbrella","Shoulder-tied dress","T-shirt / Undershirt","Underwear","Cloth wrap (men's)","Handbag"]},
 
-  // ── P7: TRANSPORT (MEDIUM) ────────────────────────────
+  // -- P7: TRANSPORT (MEDIUM) ----------------------------
   // GAADDID→MASRAX, ALAAB→NAFATO, GAADHI→BAATROOL
   {num:7,somali:"GAADIIDKA",english:"Transport",difficulty:"medium",
-   words:  ["BAABUUR","DIYAARAD","TAREEN","TAGSI","BAASKIIL","MARKAB","BAATROOL","NAFATO","WADDO","TIGIDH","IMAATIN","BIXITAAN","MOOTO","MASRAX","RAKAAB"],
-   clues:  ["Car / Vehicle","Plane","Train","Taxi","Bicycle","Boat / Ship","Petrol","Diesel","Road","Ticket","Arrivals","Departures","Motorbike","Platform","Passenger"]},
+   words:  ["BAABUUR","DIYAARAD","TAREEN","TAGSI","BAASKIIL","MARKAB","BAATROOL","WADDO","NAFATO","ALBAAB","TIGIDH","IMAATIN","BIXITAAN","RAKAAB","MASRAX"],
+   clues:  ["Car / Vehicle","Plane","Train","Taxi","Bicycle","Boat / Ship","Petrol","Road","Diesel","Gate","Ticket","Arrivals","Departures","Passenger","Platform"]},
 
-  // ── P8: FOOD (MEDIUM) ─────────────────────────────────
+  // -- P8: FOOD (MEDIUM) ---------------------------------
   {num:8,somali:"CUNTADA",english:"Food & Drink",difficulty:"medium",
-   words:  ["BARIIS","DIGIR","ROOTI","CANJEERO","DOOLSHO","HILIB","SUQAAR","MARAQ","BOORASH","SAMBUUS","XALWO","CAANO","SHAAH","BIYO","SALIID"],
-   clues:  ["Rice","Beans","Bread","Flatbread","Dessert / Sweets","Meat","Stir-fried Meat","Broth","Porridge","Samosa","Halwa (sweet)","Milk","Tea","Water","Oil"]},
+   words:  ["BARIIS","HILIB","CANJEERO","XALWO","CAANO","SHAAH","MUQMAD","ROOTI","MARAQ","BOORASH","SUQAAR","SAMBUUS","DIGIR","BIYO","SUBAG"],
+   clues:  ["Rice","Meat","Flatbread","Halwa (sweet)","Milk","Tea","Dried Meat","Bread","Broth","Porridge","Stir-fried Meat","Samosa","Beans","Water","Ghee"]},
 
-  // ── P9: BODY (MEDIUM) ─────────────────────────────────
+  // -- P9: BODY (MEDIUM) ---------------------------------
   // KILYO=Kidneys (plural confirmed), XABADKA=The Chest (Ribcage)
   // MINDHICIRKA = Intestines / Gut, AFKA = The Mouth
   {num:9,somali:"JIRKA",english:"Body Parts",difficulty:"medium",
-   words:  ["MADAX","INDHO","DHEGO","SAN","ILKAHA","LUQUN","GACAN","XABADKA","CALOOL","AFKA","WADNO","KILYO","DHIIG","LAF","MINDHICIRKA"],
-   clues:  ["Head","Eyes","Ears","Nose","Teeth","Neck","Hand / Arm","The Chest","Stomach","The Mouth","Heart","Kidneys","Blood","Bone","Intestines / Gut"]},
+   words:  ["MADAX","INDHO","DHEGO","SAN","ILKAHA","LUQUN","GACAN","XABADKA","CALOOL","KILYO","WADNO","DHIIG","AFKA","LAF","MINDHICIRKA"],
+   clues:  ["Head","Eyes","Ears","Nose","Teeth","Neck","Hand / Arm","The Chest (Ribcage)","Stomach","Kidneys","Heart","Blood","The Mouth","Bone","Intestines / Gut"]},
 
-  // ── P10: ANIMALS (MEDIUM) ─────────────────────────────
+  // -- P10: ANIMALS (MEDIUM) -----------------------------
   {num:10,somali:"XAYAWAANKA",english:"Animals",difficulty:"medium",
-   words:  ["GEEL","MAROODI","GERI","FARAS","LIBAAX","EYGA","BISAD","ARI","IDO","DAMEER","KALLUUN","SHIMBIRRO","DOOFAAR","DABAGAALE","SHABEELBADEED"],
-   display:["GEEL","MAROODI","GERI","FARAS","LIBAAX","EYGA","BISAD","ARI","IDO","DAMEER","KALLUUN","SHIMBIRRO","DOOFAAR","DABAGAALE","SHABEEL BADEED *"],
-   clues:  ["Camels","Elephant","Giraffe","Horse","Lion","The Dog","Cat","Goat","Sheep","Donkey","Fish","Birds","Pig","Squirrel","Shark"]},
+   words:  ["GEEL","LIBAAX","FARAS","EYGA","BISAD","DABAGAALE","GERI","MAROODI","DABOQALOOC","ARI","KALLUUN","DAMEER","SHIMBIRRO","DOOFAAR","SHABEELBADEED"],
+   display:["GEEL","LIBAAX","FARAS","EYGA","BISAD","DABAGAALE","GERI","MAROODI","DABOQALOOC","ARI","KALLUUN","DAMEER","SHIMBIRRO","DOOFAAR","SHABEEL BADEED *"],
+   clues:  ["Camels","Lion","Horse","The Dog","Cat","Gazelle","Giraffe","Elephant","Sheep","Goat","Fish","Donkey","Birds","Pig","Shark"]},
 
-  // ── P11: HEALTH (MEDIUM) ──────────────────────────────
+  // -- P11: HEALTH (MEDIUM) ------------------------------
   // DAAWO (not DAWO), XANUUN (no -KA), NEEFTA=Breath, BARBAAR→CIRBAD
   // WARQAD→SAFMAR (epidemic), remove "drug" from medicine clue
   {num:11,somali:"CAAFIMAADKA",english:"Health & Illness",difficulty:"hard",
-   words:  ["DHAKHTAR","CISBITAAL","BUKAAN","RAAJO","DARYEEL","XANUUN","QANDHO","DHAAWAC","GAROOB","NEEFTA","DAAWO","TALLAAL","CIRBAD","BAARITAAN","SAFMAR"],
-   clues:  ["Doctor","Hospital","Patient / Sick","X-ray","Care","Pain","Fever","Injury / Wound","Recovery","Breath","Medicine","Vaccine","Syringe / Injection","Medical Examination","Epidemic / Outbreak"]},
+   words:  ["DHAKHTAR","ISBITAAL","DAAWO","XANUUN","QANDHO","DHAAWAC","BUKAAN","NEEFTA","CAAFIMAAD","DARYEEL","SAFMAR","CIRBAD","GAROOB","BAARITAAN","TALLAAL"],
+   clues:  ["Doctor","Hospital","Medicine","Pain","Fever","Injury / Wound","Patient / Sick","Breath","Good Health","Care / Treatment","Epidemic / Outbreak","Syringe / Injection","Recovery","Medical Examination","Vaccine"]},
 
-  // ── P12: NATURE (HARD) ────────────────────────────────
+  // -- P12: NATURE (HARD) --------------------------------
   // KAYNTA = The Forest / Bush
-  {num:12,somali:"CIMILADA IYO DABEECADDA",english:"Weather & Nature",difficulty:"hard",
-   words:  ["ROOB","DABAYL","QORRAX","DAYAX","XIDDIG","BADDA","BIRIQ","JASIIRAD","BUUR","DHULKA","GEED","UBAX","KEYNTA","MEERE","HAWO"],
-   clues:  ["Rain","Wind","Sun","Moon","Star","Sea","Lightning","Island","Mountain","The Earth","Tree","Flower","The Forest","Planet","Air"]},
+  {num:12,somali:"DABIICADA",english:"Nature & Weather",difficulty:"hard",
+   words:  ["ROOB","QORRAX","DAYAX","XIDDIG","DABAYL","BADDA","BUUR","WEBIGA","DHULKA","JASIIRAD","GEED","UBAX","KAYNTA","MEERE","HAWO"],
+   clues:  ["Rain","Sun","Moon","Star","Wind","Sea","Mountain","River","The Earth","Island","Tree","Flower","The Forest / Bush","Planet","Air"]},
 
-  // ── P13: SOMALI PLACES (HARD) ─────────────────────────
-  {num:13,somali:"MEELAHA, XUDUUDAHA, GOBOLADA",english:"Somali Places, Borders & Regions",difficulty:"hard",
-   words:  ["MUQDISHO","KISMAAYO","BAYDHABO","BORAMA","GALKACYO","HARGEYSA","BURCO","BERBERA","MAGAALO","BOOSAASO","GAROOWE","JABUUTI","WADANKA","XUDUUD","GOBOL"],
-   clues:  ["Mogadishu","Kismayo","Baidoa","Borama","Galkayo","Hargeisa","Burao","Berbera","City","Bosaso","Garoowe","Djibouti","The Country","Border","Region / Province"]},
+  // -- P13: SOMALI PLACES (HARD) -------------------------
+  {num:13,somali:"MEELAHA SOOMAALIYA",english:"Somali Places",difficulty:"hard",
+   words:  ["MUQDISHO","HARGEYSA","BERBERA","BOOSAASO","KISMAAYO","BURCO","JABUUTI","LAASCAANOOD","WADANKA","GALKACYO","BAYDHABO","GAROOWE","XUDUUD","DEGMO","DHUSAMAREEB"],
+   clues:  ["Mogadishu","Hargeisa","Berbera","Bosaso","Kismayo","Burao","Djibouti","Las Anod","The Country","Galkayo","Baidoa","Garoowe","Border","District","Dhusamareb"]},
 
-  // ── P14: EMOTIONS (HARD) ──────────────────────────────
+  // -- P14: EMOTIONS (HARD) ------------------------------
   {num:14,somali:"DAREENKA",english:"Emotions & Feelings",difficulty:"hard",
-   words:  ["FARXAD","JACAYL","RAJO","KALSOONI","DEGGAN","MURUG","CABSI","XANAAQ","WALWAL","NAXDIN","XISHOOD","NAXARIIS","MASAYR","DULQAAD","YAABAN"],
-   clues:  ["Happiness","Love","Hope","Confident","Calm / Peaceful","Sadness","Fear","Anger / Rage","Worry / Anxiety","Shock","Shyness","Compassion","Jealousy","Patience","Surprised"]},
+   words:  ["FARXAD","MURUG","DANQASHO","CABSI","XISHOOD","JACAYL","NAXARIIS","DEGGAN","RAJO","XUSUUS","KALSOONAAN","XANAAQ","DULQAAD","NAXDIN","WALWAL"],
+   clues:  ["Happiness","Sadness","Being Moved / Touched","Fear","Shyness","Love","Compassion","Calm / Peaceful","Hope","Memory","Confidence","Anger / Rage","Patience","Shock","Worry / Anxiety"]},
 
-  // ── P15: JOBS (HARD) ──────────────────────────────────
-  // WAARDIYE=Guard/Watchman, BOOLIIS=Police, DARAWAL (not DIRAWAL), HILIBLE replaces HEESAA
+  // -- P15: JOBS (HARD) ----------------------------------
+  // WAARDIYE=Guard/Watchman, BOOLISKA=The Police, DARAWAL (not DIRAWAL), HILIBLE replaces HEESAA
   {num:15,somali:"SHAQOOYINKA",english:"Jobs & Professions",difficulty:"hard",
-   words:  ["GUDDOOMIYE","INJINEER","XISAABIYE","BEERALAY","TURJUME","NIJAAR","TUMAAL","RANJIILE","ROODHIILE","HILIBLE","DARAWAL","TAGSILE","WAARDIYE","BOOLIIS","ABUKAATE"],
-   clues:  ["Director","Engineer","Accountant","Farmer","Translator","Carpenter","Blacksmith","Painter","Baker","Butcher","Driver","Taxi Driver","Guard / Watchman","Police","Lawyer"]}
+   words:  ["WAARDIYE","BOOLISKA","INJINEER","TURJUME","ROODHIILE","XISAABIYE","DARAWAL","ABUKAATE","BEERALAY","NIJAAR","TUMAAL","RANJIILE","HILIBLE","TAGSILE","GUDDOOMIYE"],
+   clues:  ["Guard / Watchman","The Police","Engineer","Translator","Baker","Accountant","Driver","Lawyer","Farmer","Carpenter","Blacksmith","Painter","Butcher","Taxi Driver","Director"]}
 ];
 
 // ═══════════════════════════════════════════════════════
 //  GRID ENGINE
 // ═══════════════════════════════════════════════════════
+// EASY: forward and down only — simple for beginners
 const GS=20;
 const DIRS_E=[[0,1],[1,0]];
-// Medium: progressive P7→P11
 // MEDIUM P6→P10: genuine ramp — each puzzle noticeably harder
 // P6: forward+backward horizontal/vertical only — mildly tricky
 const DIRS_M1=[[0,1],[0,-1],[1,0],[-1,0]];
@@ -750,6 +828,8 @@ function place(g,w,r,c,dr,dc){
   for(let i=0;i<w.length;i++){const nr=r+dr*i,nc=c+dc*i;g[nr][nc]=w[i];pos.push([nr,nc]);}
   return pos;
 }
+
+
 function buildPuzzle(words,diff,num){
   const dirs=getDirs(diff,num||0),g=makeGrid(),placed=[],failed=[];
   const fill=diff==='hard'?FILL_HARD:FILL_EASY;
@@ -823,7 +903,7 @@ function wbank(puzzle){
   </div>` : '';
   return `<div class="wbank">
     <div class="wbank-title">Erayada La Raadsanayo · Word Bank</div>
-    <div class="wbank-wm">STAN.STORE/CILMIPRESS &nbsp;·&nbsp; STAN.STORE/CILMIPRESS &nbsp;·&nbsp; STAN.STORE/CILMIPRESS</div>
+    <div class="wbank-wm">PROPERTY OF CILMI PRESS &nbsp;·&nbsp; HANTIDA CILMI PRESS</div>
     <div class="wbank-items">${items}</div>${footnote}${famFootnote}</div>`;
 }
 
@@ -867,7 +947,7 @@ PUZZLES.forEach(p=>{
   document.body.appendChild(pg);
 });
 
-// ── BACK PAGE ────────────────────────────────────────
+// -- BACK PAGE ----------------------------------------
 const backPage = document.createElement('div');
 backPage.className = 'page';
 backPage.innerHTML = `
@@ -936,7 +1016,7 @@ backPage.innerHTML = `
     <div class="back-message-row">
       <div class="back-col-en">
         ⭐ <strong>Please leave us a review.</strong>
-        This is how we know what we are doing well and what we need to improve. Every review — big or small — helps us make better books for this community.
+        It is how we know what we are doing well and what we need to improve. Every review — big or small — helps us make better books for this community.
       </div>
       <div class="back-col-so">
         ⭐ <strong>Fadlan noo akhri dib-u-eegis.</strong>
@@ -977,434 +1057,457 @@ built.forEach(({p,g,placed})=>{
 
 <!-- CILMI PRESS DRAWING TOOLKIT -->
 
-<!-- Loading screen -->
-<div id="cp-loading" style="position:fixed;inset:0;background:#2C2825;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;transition:opacity 0.4s;">
+<div id="cpt" style="position:fixed;bottom:16px;left:50%;transform:translateX(-50%);
+  background:#1A1714;border-radius:50px;padding:7px 12px;
+  display:flex;align-items:center;gap:7px;
+  box-shadow:0 6px 28px rgba(0,0,0,0.5);z-index:9999;
+  border:1px solid rgba(255,255,255,0.08);opacity:0;transition:opacity 0.3s;
+  touch-action:manipulation;user-select:none;-webkit-user-select:none;">
+  <button class="tb on" id="tb-pen" title="Pen">&#9999;&#65039;</button>
+  <button class="tb" id="tb-hl" title="Highlight">&#128396;&#65039;</button>
+  <button class="tb" id="tb-circle" title="Circle">&#11093;</button>
+  <button class="tb" id="tb-er" title="Eraser">&#129535;</button>
+  <div style="width:1px;height:22px;background:rgba(255,255,255,0.15);flex-shrink:0"></div>
+  <div class="sw on" id="sw1" data-c="#C2613A" style="background:#C2613A"></div>
+  <div class="sw" id="sw2" data-c="#000000" style="background:#000000"></div>
+  <div class="sw" id="sw3" data-c="#4A7C59" style="background:#4A7C59"></div>
+  <div class="sw" id="sw4" data-c="#3B6FA0" style="background:#3B6FA0"></div>
+  <div class="sw" id="sw5" data-c="#e91e63" style="background:#e91e63"></div>
+  <label style="width:20px;height:20px;border-radius:50%;
+    background:conic-gradient(red,yellow,lime,cyan,blue,magenta,red);
+    cursor:pointer;flex-shrink:0;position:relative;overflow:hidden;
+    border:1.5px solid rgba(255,255,255,0.3);">
+    <input type="color" id="sw-pick" value="#ffeb3b"
+      style="opacity:0;position:absolute;inset:0;width:100%;height:100%;border:none;cursor:pointer;">
+  </label>
+  <div style="width:1px;height:22px;background:rgba(255,255,255,0.15);flex-shrink:0"></div>
+  <button class="tb" id="tb-undo" title="Undo">&#8617;&#65039;</button>
+  <button class="tb" id="tb-save" title="Save">&#128190;</button>
+  <button class="tb" id="tb-clear" title="Clear all">&#128465;&#65039;</button>
+</div>
+
+<div id="cpt-toast" style="position:fixed;bottom:74px;left:50%;transform:translateX(-50%);
+  background:#2C2825;color:#fff;font-size:12px;font-weight:700;padding:5px 14px;
+  border-radius:20px;z-index:9999;opacity:0;transition:opacity 0.25s;
+  pointer-events:none;white-space:nowrap;">Cleared</div>
+
+<div id="cpt-load" style="position:fixed;inset:0;background:#2C2825;z-index:99999;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
+  transition:opacity 0.4s;">
   <svg width="60" height="60" viewBox="0 0 220 230">
     <circle cx="110" cy="74" r="68" fill="none" stroke="rgba(194,97,58,0.5)" stroke-width="2"/>
-    <path d="M110 44 Q93 40 71 45 L71 102 Q93 98 110 102 Z" fill="none" stroke="rgba(232,221,208,0.8)" stroke-width="3.5" stroke-linejoin="round"/>
+    <path d="M110 44 Q93 40 71 45 L71 102 Q93 98 110 102 Z" fill="none" stroke="rgba(232,221,208,0.85)" stroke-width="3.5" stroke-linejoin="round"/>
     <path d="M110 44 Q127 40 149 45 L149 102 Q127 98 110 102 Z" fill="rgba(194,97,58,0.22)"/>
     <line x1="80" y1="60" x2="104" y2="59" stroke="#C2613A" stroke-width="2" stroke-linecap="round"/>
-    <line x1="80" y1="70" x2="104" y2="69" stroke="#C2613A" stroke-width="2" stroke-linecap="round"/>
-    <line x1="80" y1="80" x2="104" y2="79" stroke="#C2613A" stroke-width="2" stroke-linecap="round"/>
     <line x1="110" y1="43" x2="110" y2="103" stroke="#C2613A" stroke-width="5" stroke-linecap="round"/>
-    <path d="M110 44 A20 20 0 0 1 110 84" stroke="#C2613A" stroke-width="5" fill="none" stroke-linecap="round"/>
   </svg>
-  <div style="color:#FAF7F3;font-family:Georgia,serif;font-size:22px;font-weight:800;">Eray Raadin</div>
-  <div style="color:rgba(255,255,255,0.4);font-size:11px;letter-spacing:2px;text-transform:uppercase;">Cilmi Press · Loading…</div>
-  <div style="width:140px;height:3px;background:rgba(255,255,255,0.1);border-radius:2px;overflow:hidden;">
-    <div id="cp-bar" style="height:100%;background:#C2613A;border-radius:2px;width:0%;transition:width 1s ease;"></div>
-  </div>
+  <div style="color:#FAF7F3;font-family:Georgia,serif;font-size:20px;font-weight:800;">Eray Raadin</div>
+  <div style="color:rgba(255,255,255,0.4);font-size:11px;letter-spacing:2px;text-transform:uppercase;">Cilmi Press</div>
 </div>
 
-<!-- Floating toolbar -->
-<div id="cp-toolbar" style="
-  position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
-  background:#1A1714;border-radius:50px;
-  padding:9px 14px;display:flex;align-items:center;gap:8px;
-  box-shadow:0 6px 28px rgba(0,0,0,0.5);z-index:9999;
-  border:1px solid rgba(255,255,255,0.08);
-  opacity:0;transition:opacity 0.4s;
-  -webkit-tap-highlight-color:transparent;
-  touch-action:none;user-select:none;
-">
-  <button id="cp-drawmode" onclick="toggleDrawMode()" title="Toggle draw mode" style="width:36px;height:36px;border-radius:50%;border:2px solid rgba(255,255,255,0.4);background:rgba(255,255,255,0.1);color:#fff;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;touch-action:manipulation;">✏️</button>
-  <div style="width:1px;height:24px;background:rgba(255,255,255,0.12);flex-shrink:0;"></div>
-  <button id="cp-pen" style="width:36px;height:36px;border-radius:50%;border:none;background:#C2613A;color:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;touch-action:manipulation;" title="Pen">✏️</button>
-  <button id="cp-hl" style="width:36px;height:36px;border-radius:50%;border:none;background:rgba(255,255,255,0.1);color:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;touch-action:manipulation;" title="Highlighter">🖍️</button>
-  <button id="cp-circle" style="width:36px;height:36px;border-radius:50%;border:none;background:rgba(255,255,255,0.1);color:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;touch-action:manipulation;" title="Circle word">⭕</button>
-  <button id="cp-er" style="width:36px;height:36px;border-radius:50%;border:none;background:rgba(255,255,255,0.1);color:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;touch-action:manipulation;" title="Eraser">🧽</button>
-  <div style="width:1px;height:24px;background:rgba(255,255,255,0.12);"></div>
-  <div id="cp-c1" data-c="#C2613A" style="width:20px;height:20px;border-radius:50%;background:#C2613A;cursor:pointer;border:2px solid #fff;-webkit-tap-highlight-color:transparent;touch-action:manipulation;" onclick="pickColor(this)"></div>
-  <div id="cp-c2" data-c="#1A1714" style="width:20px;height:20px;border-radius:50%;background:#1A1714;cursor:pointer;border:2px solid transparent;-webkit-tap-highlight-color:transparent;touch-action:manipulation;" onclick="pickColor(this)"></div>
-  <div id="cp-c3" data-c="#4A7C59" style="width:20px;height:20px;border-radius:50%;background:#4A7C59;cursor:pointer;border:2px solid transparent;-webkit-tap-highlight-color:transparent;touch-action:manipulation;" onclick="pickColor(this)"></div>
-  <div id="cp-c4" data-c="#3B6FA0" style="width:20px;height:20px;border-radius:50%;background:#3B6FA0;cursor:pointer;border:2px solid transparent;-webkit-tap-highlight-color:transparent;touch-action:manipulation;" onclick="pickColor(this)"></div>
-  <div id="cp-c5" data-c="#A63228" style="width:20px;height:20px;border-radius:50%;background:#A63228;cursor:pointer;border:2px solid transparent;-webkit-tap-highlight-color:transparent;touch-action:manipulation;" onclick="pickColor(this)"></div>
-  <!-- Any colour picker -->
-  <label title="Pick any colour" style="width:20px;height:20px;border-radius:50%;overflow:hidden;cursor:pointer;border:2px solid rgba(255,255,255,0.3);flex-shrink:0;position:relative;display:flex;align-items:center;justify-content:center;background:conic-gradient(red,yellow,lime,cyan,blue,magenta,red);">
-    <input type="color" id="cp-custom-color" value="#ffffff" style="opacity:0;position:absolute;width:100%;height:100%;cursor:pointer;border:none;padding:0;" title="Pick any colour">
-  </label>
-  <div style="width:1px;height:24px;background:rgba(255,255,255,0.12);"></div>
-  <button id="cp-undo" style="width:36px;height:36px;border-radius:50%;border:none;background:rgba(255,255,255,0.1);color:#fff;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;touch-action:manipulation;" title="Undo">↩️</button>
-  <button id="cp-save" style="width:36px;height:36px;border-radius:50%;border:none;background:rgba(255,255,255,0.1);color:#fff;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;touch-action:manipulation;" title="Save">💾</button>
-  <button id="cp-clear" style="width:36px;height:36px;border-radius:50%;border:none;background:rgba(255,255,255,0.1);color:#fff;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;touch-action:manipulation;" title="Clear all">🗑️</button>
-</div>
-
-<!-- Saved toast -->
-<div id="cp-toast" style="position:fixed;bottom:78px;left:50%;transform:translateX(-50%);background:#4A7C59;color:#fff;font-size:12px;font-weight:700;padding:6px 16px;border-radius:20px;z-index:9998;opacity:0;transition:opacity 0.3s;pointer-events:none;white-space:nowrap;">✅ Progress saved</div>
+<style>
+.tb{width:33px;height:33px;border-radius:50%;border:none;
+  background:rgba(255,255,255,0.1);color:#fff;font-size:14px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation;flex-shrink:0;
+  transition:background 0.15s;}
+.tb.on{background:#C2613A;}
+.sw{width:20px;height:20px;border-radius:50%;cursor:pointer;flex-shrink:0;
+  border:2px solid transparent;touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;transition:border 0.1s;}
+.sw.on{border:2px solid #fff;}
+@media print{#cpt,#cpt-toast,#cpt-load{display:none!important;}}
+</style>
 
 <script>
 (function(){
 'use strict';
 
-const STORE = 'cp_er_v2';
-var tool = 'pen';
+/* ====================================================
+   STROKE-BASED DRAWING ENGINE
+   Stores drawing commands — never calls toDataURL during drawing.
+   toDataURL only called on explicit save or page restore.
+   ==================================================== */
+
+var KEY   = 'er_v4';
+var tool  = 'pen';
 var color = '#C2613A';
-var size = 3;
-var drawing = false;
-var startX = 0, startY = 0, lastX = 0, lastY = 0;
-var canvases = [];
-var snapshots = {}; // {index: [dataURL,...]}
-var currentCanvas = null;
-var currentCtx = null;
-var currentIndex = -1;
+var size  = 3;
 
-// -- LOADING --
-var bar = document.getElementById('cp-bar');
-if(bar) setTimeout(function(){ bar.style.width = '100%'; }, 50);
+/* Each page has: canvas, ctx, strokes[], redoStack[] */
+var pages = [];
+var activePage = -1;
+var isDrawing  = false;
+var sx=0, sy=0;
+var rafId = null;
+var pendingPoint = null;
 
-// -- INIT after puzzles render --
-var drawModeActive = false;
-
+/* ---- init ---- */
 function init(){
-  var pages = document.querySelectorAll('.page');
-  pages.forEach(function(page, i){
-    var canvas = document.createElement('canvas');
-    // Start with pointer-events none so scrolling works normally
-    // Drawing only activates when draw mode is on
-    canvas.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;z-index:50;touch-action:auto;pointer-events:none;';
-    canvas.setAttribute('data-idx', i);
+  document.querySelectorAll('.page').forEach(function(page, i){
+    var cv = document.createElement('canvas');
+    cv.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;' +
+                       'z-index:50;touch-action:none;';
     page.style.position = 'relative';
-    page.appendChild(canvas);
+    page.appendChild(cv);
 
-    function sizeIt(){
-      var prev = canvas.toDataURL();
-      canvas.width = page.offsetWidth;
-      canvas.height = page.offsetHeight;
-      if(prev !== 'data:,'){
-        var img = new Image();
-        img.onload = function(){ canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height); };
-        img.src = prev;
-      }
+    var pageIndex = i;
+    function resize(){
+      cv.width  = page.offsetWidth;
+      cv.height = page.offsetHeight;
+      if(pages[pageIndex]) redraw(pageIndex);
     }
-    sizeIt();
-    window.addEventListener('resize', sizeIt);
-    snapshots[i] = [];
-    saveSnap(canvas, i);
-    canvases.push(canvas);
+    resize();
+    window.addEventListener('resize', resize);
 
-    // Pointer events - work on ALL browsers including Safari iOS 13+
-    canvas.addEventListener('pointerdown', function(e){ onStart(e, canvas, i); }, {passive:false});
-    canvas.addEventListener('pointermove', function(e){ onMove(e, canvas, i); }, {passive:false});
-    canvas.addEventListener('pointerup', function(e){ onEnd(e, canvas, i); }, {passive:false});
-    canvas.addEventListener('pointercancel', function(e){ onEnd(e, canvas, i); }, {passive:false});
-    // Touch fallbacks — guarantee drawing works in Safari and in-app browsers
-    canvas.addEventListener('touchstart', function(e){
+    pages.push({ cv:cv, ctx:cv.getContext('2d'), strokes:[], redo:[] });
+
+    /* ----- touch events (iOS Safari) ----- */
+    cv.addEventListener('touchstart', function(e){
       e.preventDefault();
-      var t=e.touches[0];
-      onStart({clientX:t.clientX,clientY:t.clientY,pointerId:1,preventDefault:function(){},target:canvas}, canvas, i);
+      var t = e.touches[0];
+      onStart(getPos(t,cv), i);
     }, {passive:false});
-    canvas.addEventListener('touchmove', function(e){
+
+    cv.addEventListener('touchmove', function(e){
       e.preventDefault();
-      var t=e.touches[0];
-      onMove({clientX:t.clientX,clientY:t.clientY,pointerId:1,preventDefault:function(){},target:canvas}, canvas, i);
+      if(!isDrawing || activePage!==i) return;
+      var t = e.touches[0];
+      onMove(getPos(t,cv), i);
     }, {passive:false});
-    canvas.addEventListener('touchend', function(e){
+
+    cv.addEventListener('touchend', function(e){
       e.preventDefault();
-      var t=e.changedTouches[0];
-      onEnd({clientX:t.clientX,clientY:t.clientY,pointerId:1,preventDefault:function(){},target:canvas}, canvas, i);
+      if(!isDrawing || activePage!==i) return;
+      onEnd(i);
+    }, {passive:false});
+
+    /* ----- pointer events (desktop + Android) ----- */
+    cv.addEventListener('pointerdown', function(e){
+      if(e.pointerType === 'touch') return; /* handled above */
+      e.preventDefault();
+      onStart(getPos(e,cv), i);
+    }, {passive:false});
+
+    cv.addEventListener('pointermove', function(e){
+      if(e.pointerType === 'touch') return;
+      if(!isDrawing || activePage!==i) return;
+      onMove(getPos(e,cv), i);
+    }, {passive:false});
+
+    cv.addEventListener('pointerup', function(e){
+      if(e.pointerType === 'touch') return;
+      if(!isDrawing || activePage!==i) return;
+      onEnd(i);
+    }, {passive:false});
+
+    cv.addEventListener('pointercancel', function(e){
+      if(isDrawing && activePage===i) onEnd(i);
     }, {passive:false});
   });
 
-  // Show toolbar
-  var tb = document.getElementById('cp-toolbar');
-  if(tb) tb.style.opacity = '1';
+  /* show toolbar */
+  document.getElementById('cpt').style.opacity = '1';
 
-  // Hide loading
-  var ls = document.getElementById('cp-loading');
-  if(ls){
-    ls.style.opacity = '0';
-    setTimeout(function(){ if(ls.parentNode) ls.parentNode.removeChild(ls); }, 450);
-  }
+  /* hide loading */
+  var load = document.getElementById('cpt-load');
+  if(load){ load.style.opacity='0'; setTimeout(function(){ load.remove(); }, 400); }
 
-  // Restore saved drawings
-  restoreAll();
+  /* restore saved drawings */
+  restore();
 }
 
-// -- COORDINATES --
-function getXY(e, canvas){
-  var rect = canvas.getBoundingClientRect();
-  var sx = canvas.width / rect.width;
-  var sy = canvas.height / rect.height;
-  var cx, cy;
-  if(e.clientX !== undefined){
-    cx = e.clientX; cy = e.clientY;
-  } else if(e.touches && e.touches.length){
-    cx = e.touches[0].clientX; cy = e.touches[0].clientY;
-  } else {
-    cx = e.changedTouches[0].clientX; cy = e.changedTouches[0].clientY;
-  }
-  return { x:(cx-rect.left)*sx, y:(cy-rect.top)*sy };
+/* ---- coordinates ---- */
+function getPos(e, cv){
+  var r  = cv.getBoundingClientRect();
+  var sx = cv.width  / r.width;
+  var sy = cv.height / r.height;
+  return { x:(e.clientX-r.left)*sx, y:(e.clientY-r.top)*sy };
 }
 
-// -- DRAW EVENTS --
-function onStart(e, canvas, idx){
-  e.preventDefault();
-  if(e.pointerId && canvas.setPointerCapture) canvas.setPointerCapture(e.pointerId);
-  drawing = true;
-  currentCanvas = canvas;
-  currentCtx = canvas.getContext('2d');
-  currentIndex = idx;
-  var p = getXY(e, canvas);
-  startX = lastX = p.x;
-  startY = lastY = p.y;
-  saveSnap(canvas, idx);
+/* ---- stroke events ---- */
+function onStart(p, i){
+  isDrawing  = true;
+  activePage = i;
+  sx = p.x; sy = p.y;
+  pages[i].redo = []; /* clear redo on new stroke */
 
-  var ctx = currentCtx;
-  ctx.lineCap = 'round';
-  ctx.lineJoin = 'round';
+  var stroke = {
+    tool:tool, color:color, size:size,
+    pts:[{x:p.x, y:p.y}]
+  };
+  pages[i].strokes.push(stroke);
 
-  if(tool === 'pen'){
-    ctx.globalCompositeOperation = 'source-over';
-    ctx.globalAlpha = 1;
-    ctx.strokeStyle = color;
-    ctx.lineWidth = size;
-    ctx.beginPath();
-    ctx.moveTo(p.x, p.y);
-  } else if(tool === 'highlight'){
-    ctx.globalCompositeOperation = 'source-over';
-    ctx.globalAlpha = 0.25;
-    ctx.strokeStyle = color;
-    ctx.lineWidth = size * 8;
-    ctx.beginPath();
-    ctx.moveTo(p.x, p.y);
-  } else if(tool === 'eraser'){
-    ctx.globalCompositeOperation = 'destination-out';
-    ctx.globalAlpha = 1;
-    ctx.lineWidth = size * 8;
-    ctx.beginPath();
-    ctx.moveTo(p.x, p.y);
-  }
+  /* draw the first dot immediately */
+  var pg = pages[i];
+  var ctx = pg.ctx;
+  applyStyle(ctx, stroke);
+  ctx.beginPath();
+  ctx.arc(p.x, p.y, stroke.tool==='eraser'?size*5:
+          stroke.tool==='highlight'?size*3.5:size/2, 0, Math.PI*2);
+  if(stroke.tool==='eraser') ctx.fill();
+  else { ctx.fillStyle=color; ctx.fill(); }
 }
 
-function onMove(e, canvas, idx){
-  if(!drawing || currentCanvas !== canvas) return;
-  e.preventDefault();
-  var p = getXY(e, canvas);
-  var ctx = currentCtx;
+function onMove(p, i){
+  if(!isDrawing || activePage!==i) return;
+  var pg     = pages[i];
+  var stroke = pg.strokes[pg.strokes.length-1];
+  stroke.pts.push({x:p.x, y:p.y});
+  pendingPoint = {p:p, i:i};
 
-  if(tool === 'circle'){
-    // Redraw from last snapshot for circle preview
-    var snaps = snapshots[idx];
-    if(snaps && snaps.length){
-      var img = new Image();
-      var snap = snaps[snaps.length-1];
-      var cw = canvas.width, ch = canvas.height;
-      img.onload = function(){
-        ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';
-        ctx.clearRect(0,0,cw,ch);
-        ctx.drawImage(img,0,0);
-        drawEllipse(ctx, startX, startY, p.x, p.y, color, size, 0.7);
-      };
-      img.src = snap;
-    }
+  if(!rafId) rafId = requestAnimationFrame(renderPending);
+}
+
+function renderPending(){
+  rafId = null;
+  if(!pendingPoint) return;
+  var p = pendingPoint.p, i = pendingPoint.i;
+  pendingPoint = null;
+  var pg     = pages[i];
+  var stroke = pg.strokes[pg.strokes.length-1];
+  var pts    = stroke.pts;
+  if(pts.length < 2) return;
+
+  var ctx = pg.ctx;
+  applyStyle(ctx, stroke);
+  ctx.beginPath();
+
+  if(stroke.tool === 'circle'){
+    /* redraw everything for live preview */
+    redraw(i);
+    drawEllipsePreview(ctx, sx, sy, p.x, p.y, stroke);
     return;
   }
 
+  /* draw only the newest segment */
+  var prev = pts[pts.length-2];
+  ctx.moveTo(prev.x, prev.y);
   ctx.lineTo(p.x, p.y);
   ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(p.x, p.y);
-  lastX = p.x; lastY = p.y;
 }
 
-function onEnd(e, canvas, idx){
-  if(!drawing || currentCanvas !== canvas) return;
-  e.preventDefault();
-  var p = getXY(e, canvas);
-  var ctx = currentCtx;
+function onEnd(i){
+  isDrawing  = false;
+  activePage = i;
+  if(rafId){ cancelAnimationFrame(rafId); rafId=null; }
+  pendingPoint = null;
 
-  if(tool === 'circle'){
-    ctx.globalAlpha = 1;
-    ctx.globalCompositeOperation = 'source-over';
-    drawEllipse(ctx, startX, startY, p.x, p.y, color, size, 1);
+  var pg     = pages[i];
+  var stroke = pg.strokes[pg.strokes.length-1];
+
+  /* for circle: do final clean draw */
+  if(stroke.tool === 'circle' && stroke.pts.length > 1){
+    var last = stroke.pts[stroke.pts.length-1];
+    redraw(i);
+    var ctx = pg.ctx;
+    applyStyle(ctx, stroke);
+    drawEllipse(ctx, sx, sy, last.x, last.y, stroke);
   }
+
+  /* remove zero-length strokes */
+  if(stroke.pts.length < 2) pg.strokes.pop();
+
+  scheduleSave();
+}
+
+/* ---- apply canvas style from stroke ---- */
+function applyStyle(ctx, stroke){
+  ctx.lineCap  = 'round';
+  ctx.lineJoin = 'round';
+  if(stroke.tool === 'eraser'){
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.globalAlpha  = 1;
+    ctx.lineWidth    = stroke.size * 10;
+    ctx.strokeStyle  = 'rgba(0,0,0,1)';
+    ctx.fillStyle    = 'rgba(0,0,0,1)';
+  } else if(stroke.tool === 'highlight'){
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.globalAlpha  = 0.28;
+    ctx.lineWidth    = stroke.size * 7;
+    ctx.strokeStyle  = stroke.color;
+  } else {
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.globalAlpha  = 1;
+    ctx.lineWidth    = stroke.size;
+    ctx.strokeStyle  = stroke.color;
+    ctx.fillStyle    = stroke.color;
+  }
+}
+
+/* ---- full redraw from strokes (for undo / resize) ---- */
+function redraw(i){
+  if(!pages[i]) return;
+  var pg  = pages[i];
+  if(!pg.ctx || !pg.cv) return;
+  var ctx = pg.ctx;
+  var cv  = pg.cv;
+  ctx.clearRect(0,0,cv.width,cv.height);
+  ctx.globalAlpha = 1;
+  ctx.globalCompositeOperation = 'source-over';
+
+  pg.strokes.forEach(function(stroke){
+    var pts = stroke.pts;
+    if(!pts || pts.length===0) return;
+    applyStyle(ctx, stroke);
+
+    if(stroke.tool === 'circle'){
+      if(pts.length < 2) return;
+      drawEllipse(ctx, pts[0].x, pts[0].y,
+                  pts[pts.length-1].x, pts[pts.length-1].y, stroke);
+      return;
+    }
+
+    ctx.beginPath();
+    ctx.moveTo(pts[0].x, pts[0].y);
+    for(var j=1; j<pts.length; j++) ctx.lineTo(pts[j].x, pts[j].y);
+    ctx.stroke();
+  });
 
   ctx.globalAlpha = 1;
   ctx.globalCompositeOperation = 'source-over';
-  ctx.beginPath();
-  drawing = false;
-
-  // Auto-save debounced
-  clearTimeout(window._cpSaveTimer);
-  window._cpSaveTimer = setTimeout(saveAll, 800);
 }
 
-function drawEllipse(ctx, x1, y1, x2, y2, col, sz, alpha){
+/* ---- ellipse helpers ---- */
+function drawEllipse(ctx, x1, y1, x2, y2, stroke){
   var cx=(x1+x2)/2, cy=(y1+y2)/2;
-  var rx=Math.max(Math.abs(x2-x1)/2,4);
-  var ry=Math.max(Math.abs(y2-y1)/2,4);
+  var rx=Math.max(Math.abs(x2-x1)/2,4), ry=Math.max(Math.abs(y2-y1)/2,4);
   ctx.save();
-  ctx.globalAlpha=alpha;
-  ctx.strokeStyle=col;
-  ctx.lineWidth=sz+1;
-  ctx.lineCap='round';
-  ctx.beginPath();
-  ctx.ellipse(cx,cy,rx,ry,0,0,Math.PI*2);
-  ctx.stroke();
+  applyStyle(ctx, stroke);
+  ctx.globalAlpha = stroke.tool==='highlight' ? 0.28 : 1;
+  ctx.beginPath(); ctx.ellipse(cx,cy,rx,ry,0,0,Math.PI*2); ctx.stroke();
+  ctx.restore();
+}
+function drawEllipsePreview(ctx, x1, y1, x2, y2, stroke){
+  ctx.save();
+  applyStyle(ctx, stroke);
+  ctx.globalAlpha = 0.6;
+  var cx=(x1+x2)/2, cy=(y1+y2)/2;
+  var rx=Math.max(Math.abs(x2-x1)/2,4), ry=Math.max(Math.abs(y2-y1)/2,4);
+  ctx.beginPath(); ctx.ellipse(cx,cy,rx,ry,0,0,Math.PI*2); ctx.stroke();
   ctx.restore();
 }
 
-// -- SNAPSHOTS (undo) --
-function saveSnap(canvas, idx){
-  if(!snapshots[idx]) snapshots[idx]=[];
-  snapshots[idx].push(canvas.toDataURL());
-  if(snapshots[idx].length > 20) snapshots[idx].shift();
-}
-
+/* ---- undo ---- */
 function undo(){
-  if(!currentCanvas||currentIndex<0) return;
-  var snaps = snapshots[currentIndex];
-  if(!snaps||snaps.length<=1) return;
-  snaps.pop();
-  var img = new Image();
-  var snap = snaps[snaps.length-1];
-  var cw=currentCanvas.width, ch=currentCanvas.height;
-  img.onload=function(){
-    currentCtx.clearRect(0,0,cw,ch);
-    currentCtx.drawImage(img,0,0);
-  };
-  img.src=snap;
-}
-
-// -- STORAGE --
-function saveAll(){
-  try{
-    var data={};
-    canvases.forEach(function(c,i){
-      var b=document.createElement('canvas');
-      b.width=c.width;b.height=c.height;
-      var d=c.toDataURL('image/webp',0.5);
-      if(d!==b.toDataURL()) data[i]=d;
-    });
-    if(Object.keys(data).length){
-      localStorage.setItem(STORE, JSON.stringify(data));
-      showToast();
-    }
-  }catch(e){}
-}
-
-function restoreAll(){
-  try{
-    var raw=localStorage.getItem(STORE);
-    if(!raw)return;
-    var data=JSON.parse(raw);
-    Object.keys(data).forEach(function(i){
-      var c=canvases[parseInt(i)];
-      if(!c)return;
-      var img=new Image();
-      img.onload=function(){
-        c.getContext('2d').drawImage(img,0,0,c.width,c.height);
-      };
-      img.src=data[i];
-    });
-  }catch(e){}
-}
-
-function clearAll(){
-  if(!confirm('Clear all drawings? Dhammaan sawirrada waa la tirtiri doonaa.'))return;
-  canvases.forEach(function(c){
-    c.getContext('2d').clearRect(0,0,c.width,c.height);
-  });
-  try{localStorage.removeItem(STORE);}catch(e){}
-  snapshots={};
-  canvases.forEach(function(c,i){
-    snapshots[i]=[];
-    saveSnap(c,i);
-  });
-}
-
-function showToast(){
-  var t=document.getElementById('cp-toast');
-  if(!t)return;
-  t.style.opacity='1';
-  clearTimeout(window._cpToast);
-  window._cpToast=setTimeout(function(){t.style.opacity='0';},1800);
-}
-
-// -- TOOL BUTTONS --
-function setActive(id){
-  ['cp-pen','cp-hl','cp-circle','cp-er'].forEach(function(bid){
-    var b=document.getElementById(bid);
-    if(b) b.style.background = bid===id ? '#C2613A' : 'rgba(255,255,255,0.1)';
-  });
-}
-
-function toggleDrawMode(){
-  drawModeActive = !drawModeActive;
-  var btn = document.getElementById('cp-drawmode');
-  var canvases = document.querySelectorAll('canvas[data-idx]');
-  if(drawModeActive){
-    // Enable drawing — block scroll on canvases
-    canvases.forEach(function(c){
-      c.style.touchAction = 'none';
-      c.style.pointerEvents = 'all';
-    });
-    if(btn){
-      btn.style.background = '#C2613A';
-      btn.style.border = '2px solid #fff';
-      btn.title = 'Drawing ON — tap to scroll';
-    }
-  } else {
-    // Disable drawing — allow scroll
-    canvases.forEach(function(c){
-      c.style.touchAction = 'auto';
-      c.style.pointerEvents = 'none';
-    });
-    if(btn){
-      btn.style.background = 'rgba(255,255,255,0.1)';
-      btn.style.border = '2px solid rgba(255,255,255,0.4)';
-      btn.title = 'Drawing OFF — tap to draw';
+  /* find the last page that has strokes */
+  var i = activePage >= 0 ? activePage : -1;
+  /* also try all pages if active has none */
+  if(i < 0 || !pages[i] || pages[i].strokes.length === 0){
+    for(var j=pages.length-1; j>=0; j--){
+      if(pages[j].strokes.length > 0){ i=j; break; }
     }
   }
+  if(i < 0 || !pages[i] || pages[i].strokes.length===0) return;
+  var removed = pages[i].strokes.pop();
+  pages[i].redo.push(removed);
+  redraw(i);
+  scheduleSave();
 }
 
-document.getElementById('cp-pen').onclick=function(){tool='pen';size=3;setActive('cp-pen');};
-document.getElementById('cp-hl').onclick=function(){tool='highlight';size=3;setActive('cp-hl');};
-document.getElementById('cp-circle').onclick=function(){tool='circle';size=3;setActive('cp-circle');};
-document.getElementById('cp-er').onclick=function(){tool='eraser';size=4;setActive('cp-er');};
-document.getElementById('cp-undo').onclick=undo;
-document.getElementById('cp-save').onclick=function(){saveAll();};
-document.getElementById('cp-clear').onclick=clearAll;
+/* ---- clear all ---- */
+function clearAll(){
+  /* no confirm dialog — just clear immediately */
+  pages.forEach(function(pg, i){
+    pg.strokes = [];
+    pg.redo    = [];
+    var ctx = pg.ctx;
+    ctx.globalAlpha = 1;
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.clearRect(0,0,pg.cv.width,pg.cv.height);
+  });
+  isDrawing  = false;
+  activePage = -1;
+  /* wipe storage */
+  try{ localStorage.removeItem(KEY); }catch(e){}
+  toast('Cleared');
+}
 
-['cp-c1','cp-c2','cp-c3','cp-c4','cp-c5'].forEach(function(id){
-  var el=document.getElementById(id);
-  if(!el)return;
-  el.onclick=function(){ pickColor(el); };
+/* ---- save / restore ---- */
+var saveTimer = null;
+function scheduleSave(){
+  if(saveTimer) clearTimeout(saveTimer);
+  saveTimer = setTimeout(doSave, 1500);
+}
+
+function doSave(){
+  saveTimer = null;
+  try{
+    var data = {};
+    pages.forEach(function(pg, i){
+      if(pg.strokes.length > 0) data[i] = pg.strokes;
+    });
+    if(Object.keys(data).length){
+      localStorage.setItem(KEY, JSON.stringify(data));
+    } else {
+      localStorage.removeItem(KEY);
+    }
+    toast('Saved');
+  }catch(e){}
+}
+
+function restore(){
+  try{
+    var raw = localStorage.getItem(KEY);
+    if(!raw) return;
+    var data = JSON.parse(raw);
+    if(!data || typeof data !== 'object') return;
+    Object.keys(data).forEach(function(i){
+      var idx = parseInt(i);
+      if(isNaN(idx) || !pages[idx]) return;
+      pages[idx].strokes = Array.isArray(data[i]) ? data[i] : [];
+      redraw(idx);
+    });
+  }catch(e){}
+}
+
+/* ---- toast ---- */
+function toast(msg){
+  var t = document.getElementById('cpt-toast');
+  if(!t) return;
+  t.textContent = msg || 'Saved';
+  t.style.opacity = '1';
+  clearTimeout(window._cpt);
+  window._cpt = setTimeout(function(){ t.style.opacity='0'; }, 1600);
+}
+
+/* ---- tool buttons ---- */
+function setTool(id){
+  tool = id;
+  ['tb-pen','tb-hl','tb-circle','tb-er'].forEach(function(b){
+    var el = document.getElementById(b);
+    if(el) el.className = b===('tb-'+id) ? 'tb on' : 'tb';
+  });
+}
+
+document.getElementById('tb-pen').onclick    = function(){ setTool('pen'); };
+document.getElementById('tb-hl').onclick     = function(){ setTool('highlight'); };
+document.getElementById('tb-circle').onclick = function(){ setTool('circle'); };
+document.getElementById('tb-er').onclick     = function(){ setTool('eraser'); };
+document.getElementById('tb-undo').onclick   = undo;
+document.getElementById('tb-save').onclick   = function(){ 
+  if(saveTimer){ clearTimeout(saveTimer); saveTimer=null; }
+  doSave();
+  toast('Saved');
+};
+document.getElementById('tb-clear').onclick  = clearAll;
+
+/* ---- colour swatches ---- */
+function setColor(c, el){
+  color = c;
+  document.querySelectorAll('.sw').forEach(function(s){ s.className='sw'; });
+  if(el) el.className = 'sw on';
+  if(tool==='eraser') setTool('pen');
+}
+['sw1','sw2','sw3','sw4','sw5'].forEach(function(id){
+  var el = document.getElementById(id);
+  if(el) el.onclick = function(){ setColor(el.getAttribute('data-c'), el); };
+});
+document.getElementById('sw-pick').addEventListener('input', function(){
+  setColor(this.value, null);
 });
 
-function pickColor(el){
-  color=el.getAttribute('data-c');
-  ['cp-c1','cp-c2','cp-c3','cp-c4','cp-c5'].forEach(function(cid){
-    var ce=document.getElementById(cid);
-    if(ce)ce.style.border=cid===el.id?'2px solid #fff':'2px solid transparent';
-  });
-  if(tool==='eraser'){tool='pen';setActive('cp-pen');}
-}
-
-// Custom colour picker
-var customPicker=document.getElementById('cp-custom-color');
-if(customPicker){
-  customPicker.addEventListener('input',function(){
-    color=this.value;
-    // Deselect all preset swatches
-    ['cp-c1','cp-c2','cp-c3','cp-c4','cp-c5'].forEach(function(cid){
-      var ce=document.getElementById(cid);
-      if(ce)ce.style.border='2px solid transparent';
-    });
-    if(tool==='eraser'){tool='pen';setActive('cp-pen');}
-  });
-  customPicker.addEventListener('change',function(){
-    color=this.value;
-    if(tool==='eraser'){tool='pen';setActive('cp-pen');}
-  });
-}
-
-// Prevent toolbar scroll interference
-document.getElementById('cp-toolbar').addEventListener('touchmove',function(e){
-  e.stopPropagation();
-},{passive:false});
-
-// -- START --
+/* ---- start ---- */
 setTimeout(init, 900);
 
 })();
