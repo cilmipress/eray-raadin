@@ -1056,33 +1056,43 @@ built.forEach(({p,g,placed})=>{
 
 <!-- CILMI PRESS DRAWING TOOLKIT -->
 
-<div id="cpt" style="position:fixed;bottom:16px;left:50%;transform:translateX(-50%);
-  background:#1A1714;border-radius:50px;padding:7px 12px;
-  display:flex;align-items:center;gap:7px;
+<div id="cpt" style="position:fixed;bottom:10px;left:50%;transform:translateX(-50%);
+  background:#1A1714;border-radius:20px;padding:6px 8px;
+  display:flex;flex-direction:column;gap:5px;align-items:center;
   box-shadow:0 6px 28px rgba(0,0,0,0.5);z-index:9999;
   border:1px solid rgba(255,255,255,0.08);opacity:0;transition:opacity 0.3s;
-  touch-action:manipulation;user-select:none;-webkit-user-select:none;">
-  <button class="tb on" id="tb-pen" title="Pen">&#9999;&#65039;</button>
-  <button class="tb" id="tb-hl" title="Highlight">&#128396;&#65039;</button>
-  <button class="tb" id="tb-circle" title="Circle">&#11093;</button>
-  <button class="tb" id="tb-er" title="Eraser">&#129535;</button>
-  <div style="width:1px;height:22px;background:rgba(255,255,255,0.15);flex-shrink:0"></div>
-  <div class="sw on" id="sw1" data-c="#C2613A" style="background:#C2613A"></div>
-  <div class="sw" id="sw2" data-c="#000000" style="background:#000000"></div>
-  <div class="sw" id="sw3" data-c="#4A7C59" style="background:#4A7C59"></div>
-  <div class="sw" id="sw4" data-c="#3B6FA0" style="background:#3B6FA0"></div>
-  <div class="sw" id="sw5" data-c="#e91e63" style="background:#e91e63"></div>
-  <label style="width:20px;height:20px;border-radius:50%;
-    background:conic-gradient(red,yellow,lime,cyan,blue,magenta,red);
-    cursor:pointer;flex-shrink:0;position:relative;overflow:hidden;
-    border:1.5px solid rgba(255,255,255,0.3);">
-    <input type="color" id="sw-pick" value="#ffeb3b"
-      style="opacity:0;position:absolute;inset:0;width:100%;height:100%;border:none;cursor:pointer;">
-  </label>
-  <div style="width:1px;height:22px;background:rgba(255,255,255,0.15);flex-shrink:0"></div>
-  <button class="tb" id="tb-undo" title="Undo">&#8617;&#65039;</button>
-  <button class="tb" id="tb-save" title="Save">&#128190;</button>
-  <button class="tb" id="tb-clear" title="Clear all">&#128465;&#65039;</button>
+  touch-action:manipulation;user-select:none;-webkit-user-select:none;
+  max-width:calc(100vw - 16px);">
+
+  <!-- Row 1: Tools + action buttons -->
+  <div style="display:flex;align-items:center;gap:5px;">
+    <button class="tb on" id="tb-pen" title="Pen">&#9999;&#65039;</button>
+    <button class="tb" id="tb-hl" title="Highlight">&#128396;&#65039;</button>
+    <button class="tb" id="tb-circle" title="Circle">&#11093;</button>
+    <button class="tb" id="tb-er" title="Eraser">&#129535;</button>
+    <div style="width:1px;height:18px;background:rgba(255,255,255,0.15);flex-shrink:0"></div>
+    <button class="tb" id="tb-undo" title="Undo">&#8617;&#65039;</button>
+    <button class="tb" id="tb-save" title="Save">&#128190;</button>
+    <button class="tb" id="tb-clear" title="Clear all">&#128465;&#65039;</button>
+  </div>
+
+  <!-- Row 2: Colours -->
+  <div style="display:flex;align-items:center;gap:5px;">
+    <div class="sw on" id="sw1" data-c="#C2613A" style="background:#C2613A"></div>
+    <div class="sw" id="sw2" data-c="#000000" style="background:#000000"></div>
+    <div class="sw" id="sw3" data-c="#4A7C59" style="background:#4A7C59"></div>
+    <div class="sw" id="sw4" data-c="#3B6FA0" style="background:#3B6FA0"></div>
+    <div class="sw" id="sw5" data-c="#e91e63" style="background:#e91e63"></div>
+    <div class="sw" id="sw6" data-c="#ffffff" style="background:#ffffff"></div>
+    <label style="width:20px;height:20px;border-radius:50%;
+      background:conic-gradient(red,yellow,lime,cyan,blue,magenta,red);
+      cursor:pointer;flex-shrink:0;position:relative;overflow:hidden;
+      border:1.5px solid rgba(255,255,255,0.3);">
+      <input type="color" id="sw-pick" value="#ffeb3b"
+        style="opacity:0;position:absolute;inset:0;width:100%;height:100%;border:none;cursor:pointer;">
+    </label>
+  </div>
+
 </div>
 
 <div id="cpt-toast" style="position:fixed;bottom:74px;left:50%;transform:translateX(-50%);
@@ -1115,6 +1125,11 @@ built.forEach(({p,g,placed})=>{
   border:2px solid transparent;touch-action:manipulation;
   -webkit-tap-highlight-color:transparent;transition:border 0.1s;}
 .sw.on{border:2px solid #fff;}
+@media(max-width:420px){
+  .tb{width:28px;height:28px;font-size:13px;}
+  .sw{width:17px;height:17px;}
+  #cpt{gap:4px!important;padding:5px 8px!important;}
+}
 @media print{#cpt,#cpt-toast,#cpt-load{display:none!important;}}
 </style>
 
@@ -1498,7 +1513,7 @@ function setColor(c, el){
   if(el) el.className = 'sw on';
   if(tool==='eraser') setTool('pen');
 }
-['sw1','sw2','sw3','sw4','sw5'].forEach(function(id){
+['sw1','sw2','sw3','sw4','sw5','sw6'].forEach(function(id){
   var el = document.getElementById(id);
   if(el) el.onclick = function(){ setColor(el.getAttribute('data-c'), el); };
 });
