@@ -430,7 +430,7 @@
 
   <div class="cover-tags">
     <div class="ctag">Family<span class="so">Qoyska</span></div>
-    <div class="ctag">Greetings<span class="so">Salaamaha</span></div>
+    <div class="ctag">The Home<span class="so">Guriga</span></div>
     <div class="ctag">Numbers<span class="so">Tirooyin</span></div>
     <div class="ctag">Colours<span class="so">Midabada</span></div>
     <div class="ctag">School<span class="so">Dugsiga</span></div>
@@ -675,16 +675,15 @@ const PUZZLES = [
   // -- P1: FAMILY (EASY) ---------------------------------
   // QOYS+REER replaced with INAABTI+INAADEER (cousins), grouped logically
   {num:1,somali:"QOYSKA",english:"Family",difficulty:"easy",
-   words:  ["HOOYO","AABO","AYEEYO","AWOOWE","WALAAL","WIIL","GABAR","INAABTI","INAADEER","ILMO","CUNUG","ADEER","EEDDO","ABTI","HABARYAR"],
-   display:["HOOYO","AABO","AYEEYO","AWOOWE","WALAAL","WIIL","GABAR","INAABTI *","INAADEER *","ILMO","CUNUG","ADEER *","EEDDO *","ABTI *","HABARYAR *"],
-   clues:  ["Mother","Father","Grandmother","Grandfather","Sibling","Boy","Girl","Maternal Cousin","Paternal Cousin","Child","Baby","Uncle (pat.)","Aunt (pat.)","Uncle (mat.)","Aunt (mat.)"]},
+   words:  ["HOOYO","AABO","AYEEYO","AWOOWE","CUNUG","WIIL","GABAR","ILMO","WALAAL","INAABTI","INAADEER","ADEER","EEDDO","ABTI","HABARYAR"],
+   display:["HOOYO","AABO","AYEEYO","AWOOWE","CUNUG","WIIL","GABAR","ILMO","WALAAL","INAABTI *","INAADEER *","ADEER *","EEDDO *","ABTI *","HABARYAR *"],
+   clues:  ["Mother","Father","Grandmother","Grandfather","Baby","Boy","Girl","Child","Sibling","Maternal Cousin","Paternal Cousin","Uncle (pat.)","Aunt (pat.)","Uncle (mat.)","Aunt (mat.)"]},
 
   // -- P2: GREETINGS (EASY) ------------------------------
-  // ISKA → ISKAAWARAN (display as ISKA WARAN)
-  {num:2,somali:"SALAAMAHA",english:"Greetings",difficulty:"easy",
-   words:  ["NABAD","MAHADSANID","SUBAX","GALAB","HABEEN","HAYE","MAYA","ISKAAWARAN","SIDEE","MAXAA","XAGEE","GOORMA","SALAAN","NABADGELYO","SOODHAWOOW"],
-   display:["NABAD","MAHAD SANID *","SUBAX","GALAB","HABEEN","HAYE","MAYA","ISKA WARAN *","SIDEE","MAXAA","XAGEE","GOORMA","SALAAN","NABAD GELYO *","SOO DHAWOOW *"],
-   clues:  ["Peace / Hello","Thank You","Morning","Afternoon","Night","Yes","No","How are you","How","What","Where","When","Greeting","Goodbye","Welcome"]},
+  // P2: The Home (GURIGA) — family words display with * for multi-word
+  {num:2,somali:"GURIGA",english:"The Home",difficulty:"easy",
+   words:  ["QOL","JIKO","MUSQUL","DAAH","FADHI","DAAQAD","DARBI","SAQAF","SAGXAD","ARMAAJO","BARKIN","BUSTE","BEER","MURAAYAD","KATABAAN"],
+   clues:  ["Room","Kitchen","Toilet / Bathroom","Curtain","Sitting Room","Window","Wall","Ceiling","Floor","Wardrobe","Pillow","Blanket","Garden","Mirror","Clothes Hanger"]},
 
   // -- P3: NUMBERS (EASY) --------------------------------
   {num:3,somali:"TIROOYIN",english:"Numbers",difficulty:"easy",
@@ -696,74 +695,74 @@ const PUZZLES = [
   // SILVER is confirmed LACAG in Somali; QALIN=pen — keep LACAG for silver
   // Remove CAGAARAN, add NAXAAS (bronze) — 6 letters, unique
   {num:4,somali:"MIDABADA",english:"Colours",difficulty:"easy",
-   words:  ["CAD","MADOW","JAALLE","CAGAAR","BULUUG","BUNNI","DAHAB","LACAG","MIDAB","GUDUUD","ORANJI","DAMEERI","BASALI","CARJAAWIIS","NAXAAS"],
-   clues:  ["White","Black","Yellow","Green","Blue","Brown","Gold","Silver","Colour","Red","Orange","Grey","Pink","Purple","Bronze / Copper"]},
+   words:  ["CAD","MADOW","GUDUUD","JAALLO","ORANJI","CAGAAR","BULUUG","BASALI","CARJAAWIIS","BUNNI","DAHAB","LACAG","NAXAAS","DAMEERI","MIDAB"],
+   clues:  ["White","Black","Red","Yellow","Orange","Green","Blue","Pink","Purple","Brown","Gold","Silver","Bronze / Copper","Grey","Colour"]},
 
   // -- P5: SCHOOL (EASY) ---------------------------------
   // Removed definite articles from English clues to match Somali root forms
   // ARDAYGA=Student (not "The Student"), FASALKA=Classroom (not "The Classroom") etc.
   {num:5,somali:"DUGSIGA",english:"School",difficulty:"easy",
-   words:  ["MACALLIN","ARDAYGA","FASALKA","BUUG","QALINKA","MIISKA","KURSI","DUGSIGA","IMTIXAAN","CASHARKA","XISAAB","AKHRIS","QORAAL","SAACAD","XAALADDA"],
-   clues:  ["Teacher","Student","Classroom","Book","Pen / Pencil","Desk / Table","Chair","School","Exam / Test","Lesson","Maths","Reading","Writing","Time / Hour","Grade / Result"]},
+   words:  ["MACALLIN","ARDAY","DUGSI","FASAL","KURSI","MIIS","BUUG","QALIN","IMTIXAAN","CASHAR","GAL","AKHRIS","QORAAL","SABUURAD","NATIIJO"],
+   clues:  ["Teacher","Student","School","Classroom","Chair","Desk / Table","Book","Pen / Pencil","Exam / Test","Lesson","Folder","Reading","Writing","Blackboard","Result"]},
 
   // -- P6: CLOTHES (EASY — new) --------------------------
   // Best 15 from verified list — mix of men's, women's, universal
   {num:6,somali:"DHARKA",english:"Clothes",difficulty:"medium",
-   words:  ["SHAADH","SURWAAL","KOODH","KAB","KOOFIYAD","MASAR","JIINIS","BAATI","XIJAAB","DALLAD","GUNTIINO","GARAN","KALSON","MACAWIIS","SHANDAD"],
-   clues:  ["Shirt","Trousers","Jacket / Coat","Shoes","Hat","Scarf","Jeans","Dress","Hijab","Umbrella","Shoulder-tied dress","T-shirt / Undershirt","Underwear","Cloth wrap (men's)","Handbag"]},
+   words:  ["SHAATI","FUNAANAD","BAATI","JAAKAD","XIJAAB","SURWAAL","GOONOO","KABO","DACAS","KOOFIYAD","MASAR","JIINIS","NIGIS","MACAWIIS","DIRAC"],
+   clues:  ["Shirt","T-shirt","House Dress","Jacket","Hijab","Trousers","Skirt","Shoes","Slippers / Sliders","Hat","Scarf","Jeans","Underwear","Cloth wrap (men's)","Dress"]},
 
   // -- P7: TRANSPORT (MEDIUM) ----------------------------
   // GAADDID→MASRAX, ALAAB→NAFATO, GAADHI→BAATROOL
   {num:7,somali:"GAADIIDKA",english:"Transport",difficulty:"medium",
-   words:  ["BAABUUR","DIYAARAD","TAREEN","TAGSI","BAASKIIL","MARKAB","BAATROOL","WADDO","NAFATO","ALBAAB","TIGIDH","IMAATIN","BIXITAAN","RAKAAB","MASRAX"],
-   clues:  ["Car / Vehicle","Plane","Train","Taxi","Bicycle","Boat / Ship","Petrol","Road","Diesel","Gate","Ticket","Arrivals","Departures","Passenger","Platform"]},
+   words:  ["BAABUUR","DIYAARAD","TAREEN","TAGSI","BAASKIIL","MARKAB","BAATROOL","NAFATO","WADDO","TIGIDH","IMAATIN","BIXITAAN","MOOTO","MASRAX","RAKAAB"],
+   clues:  ["Car / Vehicle","Plane","Train","Taxi","Bicycle","Boat / Ship","Petrol","Diesel","Road","Ticket","Arrivals","Departures","Motorbike","Platform","Passenger"]},
 
   // -- P8: FOOD (MEDIUM) ---------------------------------
   {num:8,somali:"CUNTADA",english:"Food & Drink",difficulty:"medium",
-   words:  ["BARIIS","HILIB","CANJEERO","XALWO","CAANO","SHAAH","MUQMAD","ROOTI","MARAQ","BOORASH","SUQAAR","SAMBUUS","DIGIR","BIYO","SUBAG"],
-   clues:  ["Rice","Meat","Flatbread","Halwa (sweet)","Milk","Tea","Dried Meat","Bread","Broth","Porridge","Stir-fried Meat","Samosa","Beans","Water","Ghee"]},
+   words:  ["BARIIS","DIGIR","ROOTI","CANJEERO","DOOLSHO","HILIB","SUQAAR","MARAQ","BOORASH","SAMBUUS","XALWO","CAANO","SHAAH","BIYO","SALIID"],
+   clues:  ["Rice","Beans","Bread","Flatbread","Dessert / Sweets","Meat","Stir-fried Meat","Broth","Porridge","Samosa","Halwa (sweet)","Milk","Tea","Water","Oil"]},
 
   // -- P9: BODY (MEDIUM) ---------------------------------
-  // KILYO=Kidneys (plural confirmed), XABADKA=The Chest (Ribcage)
+  // KILYO=Kidneys (plural confirmed), XABADKA=The Chest
   // MINDHICIRKA = Intestines / Gut, AFKA = The Mouth
   {num:9,somali:"JIRKA",english:"Body Parts",difficulty:"medium",
-   words:  ["MADAX","INDHO","DHEGO","SAN","ILKAHA","LUQUN","GACAN","XABADKA","CALOOL","KILYO","WADNO","DHIIG","AFKA","LAF","MINDHICIRKA"],
-   clues:  ["Head","Eyes","Ears","Nose","Teeth","Neck","Hand / Arm","The Chest (Ribcage)","Stomach","Kidneys","Heart","Blood","The Mouth","Bone","Intestines / Gut"]},
+   words:  ["MADAX","INDHO","DHEGO","SAN","ILKAHA","LUQUN","GACAN","XABADKA","CALOOL","AFKA","WADNO","KILYO","DHIIG","LAF","MINDHICIRKA"],
+   clues:  ["Head","Eyes","Ears","Nose","Teeth","Neck","Hand / Arm","The Chest","Stomach","The Mouth","Heart","Kidneys","Blood","Bone","Intestines / Gut"]},
 
   // -- P10: ANIMALS (MEDIUM) -----------------------------
   {num:10,somali:"XAYAWAANKA",english:"Animals",difficulty:"medium",
-   words:  ["GEEL","LIBAAX","FARAS","EYGA","BISAD","DABAGAALE","GERI","MAROODI","DABOQALOOC","ARI","KALLUUN","DAMEER","SHIMBIRRO","DOOFAAR","SHABEELBADEED"],
-   display:["GEEL","LIBAAX","FARAS","EYGA","BISAD","DABAGAALE","GERI","MAROODI","DABOQALOOC","ARI","KALLUUN","DAMEER","SHIMBIRRO","DOOFAAR","SHABEEL BADEED *"],
-   clues:  ["Camels","Lion","Horse","The Dog","Cat","Gazelle","Giraffe","Elephant","Sheep","Goat","Fish","Donkey","Birds","Pig","Shark"]},
+   words:  ["GEEL","MAROODI","GERI","FARAS","LIBAAX","EYGA","BISAD","ARI","IDO","DAMEER","KALLUUN","SHIMBIRRO","DOOFAAR","DABAGAALE","SHABEELBADEED"],
+   display:["GEEL","MAROODI","GERI","FARAS","LIBAAX","EYGA","BISAD","ARI","IDO","DAMEER","KALLUUN","SHIMBIRRO","DOOFAAR","DABAGAALE","SHABEEL BADEED *"],
+   clues:  ["Camels","Elephant","Giraffe","Horse","Lion","The Dog","Cat","Goat","Sheep","Donkey","Fish","Birds","Pig","Squirrel","Shark"]},
 
   // -- P11: HEALTH (MEDIUM) ------------------------------
   // DAAWO (not DAWO), XANUUN (no -KA), NEEFTA=Breath, BARBAAR→CIRBAD
   // WARQAD→SAFMAR (epidemic), remove "drug" from medicine clue
   {num:11,somali:"CAAFIMAADKA",english:"Health & Illness",difficulty:"hard",
-   words:  ["DHAKHTAR","ISBITAAL","DAAWO","XANUUN","QANDHO","DHAAWAC","BUKAAN","NEEFTA","CAAFIMAAD","DARYEEL","SAFMAR","CIRBAD","GAROOB","BAARITAAN","TALLAAL"],
-   clues:  ["Doctor","Hospital","Medicine","Pain","Fever","Injury / Wound","Patient / Sick","Breath","Good Health","Care / Treatment","Epidemic / Outbreak","Syringe / Injection","Recovery","Medical Examination","Vaccine"]},
+   words:  ["DHAKHTAR","CISBITAAL","BUKAAN","RAAJO","DARYEEL","XANUUN","QANDHO","DHAAWAC","GAROOB","NEEFTA","DAAWO","TALLAAL","CIRBAD","BAARITAAN","SAFMAR"],
+   clues:  ["Doctor","Hospital","Patient / Sick","X-ray","Care","Pain","Fever","Injury / Wound","Recovery","Breath","Medicine","Vaccine","Syringe / Injection","Medical Examination","Epidemic / Outbreak"]},
 
   // -- P12: NATURE (HARD) --------------------------------
   // KAYNTA = The Forest / Bush
-  {num:12,somali:"DABIICADA",english:"Nature & Weather",difficulty:"hard",
-   words:  ["ROOB","QORRAX","DAYAX","XIDDIG","DABAYL","BADDA","BUUR","WEBIGA","DHULKA","JASIIRAD","GEED","UBAX","KAYNTA","MEERE","HAWO"],
-   clues:  ["Rain","Sun","Moon","Star","Wind","Sea","Mountain","River","The Earth","Island","Tree","Flower","The Forest / Bush","Planet","Air"]},
+  {num:12,somali:"CIMILADA IYO DABEECADDA",english:"Weather & Nature",difficulty:"hard",
+   words:  ["ROOB","DABAYL","QORRAX","DAYAX","XIDDIG","BADDA","BIRIQ","JASIIRAD","BUUR","DHULKA","GEED","UBAX","KEYNTA","MEERE","HAWO"],
+   clues:  ["Rain","Wind","Sun","Moon","Star","Sea","Lightning","Island","Mountain","The Earth","Tree","Flower","The Forest","Planet","Air"]},
 
   // -- P13: SOMALI PLACES (HARD) -------------------------
-  {num:13,somali:"MEELAHA SOOMAALIYA",english:"Somali Places",difficulty:"hard",
-   words:  ["MUQDISHO","HARGEYSA","BERBERA","BOOSAASO","KISMAAYO","BURCO","JABUUTI","LAASCAANOOD","WADANKA","GALKACYO","BAYDHABO","GAROOWE","XUDUUD","DEGMO","DHUSAMAREEB"],
-   clues:  ["Mogadishu","Hargeisa","Berbera","Bosaso","Kismayo","Burao","Djibouti","Las Anod","The Country","Galkayo","Baidoa","Garoowe","Border","District","Dhusamareb"]},
+  {num:13,somali:"MEELAHA, XUDUUDAHA, GOBOLADA",english:"Somali Places, Borders & Regions",difficulty:"hard",
+   words:  ["MUQDISHO","KISMAAYO","BAYDHABO","BORAMA","GALKACYO","HARGEYSA","BURCO","BERBERA","MAGAALO","BOOSAASO","GAROOWE","JABUUTI","WADANKA","XUDUUD","GOBOL"],
+   clues:  ["Mogadishu","Kismayo","Baidoa","Borama","Galkayo","Hargeisa","Burao","Berbera","City","Bosaso","Garoowe","Djibouti","The Country","Border","Region / Province"]},
 
   // -- P14: EMOTIONS (HARD) ------------------------------
   {num:14,somali:"DAREENKA",english:"Emotions & Feelings",difficulty:"hard",
-   words:  ["FARXAD","MURUG","DANQASHO","CABSI","XISHOOD","JACAYL","NAXARIIS","DEGGAN","RAJO","XUSUUS","KALSOONAAN","XANAAQ","DULQAAD","NAXDIN","WALWAL"],
-   clues:  ["Happiness","Sadness","Being Moved / Touched","Fear","Shyness","Love","Compassion","Calm / Peaceful","Hope","Memory","Confidence","Anger / Rage","Patience","Shock","Worry / Anxiety"]},
+   words:  ["FARXAD","JACAYL","RAJO","KALSOONI","DEGGAN","MURUG","CABSI","XANAAQ","WALWAL","NAXDIN","XISHOOD","NAXARIIS","MASAYR","DULQAAD","YAABAN"],
+   clues:  ["Happiness","Love","Hope","Confident","Calm / Peaceful","Sadness","Fear","Anger / Rage","Worry / Anxiety","Shock","Shyness","Compassion","Jealousy","Patience","Surprised"]},
 
   // -- P15: JOBS (HARD) ----------------------------------
   // WAARDIYE=Guard/Watchman, BOOLISKA=The Police, DARAWAL (not DIRAWAL), HILIBLE replaces HEESAA
   {num:15,somali:"SHAQOOYINKA",english:"Jobs & Professions",difficulty:"hard",
-   words:  ["WAARDIYE","BOOLISKA","INJINEER","TURJUME","ROODHIILE","XISAABIYE","DARAWAL","ABUKAATE","BEERALAY","NIJAAR","TUMAAL","RANJIILE","HILIBLE","TAGSILE","GUDDOOMIYE"],
-   clues:  ["Guard / Watchman","The Police","Engineer","Translator","Baker","Accountant","Driver","Lawyer","Farmer","Carpenter","Blacksmith","Painter","Butcher","Taxi Driver","Director"]}
+   words:  ["GUDDOOMIYE","INJINEER","XISAABIYE","BEERALAY","TURJUME","NIJAAR","TUMAAL","RANJIILE","ROODHIILE","HILIBLE","DARAWAL","TAGSILE","WAARDIYE","BOOLISKA","ABUKAATE"],
+   clues:  ["Director","Engineer","Accountant","Farmer","Translator","Carpenter","Blacksmith","Painter","Baker","Butcher","Driver","Taxi Driver","Guard / Watchman","The Police","Lawyer"]}
 ];
 
 // ═══════════════════════════════════════════════════════
@@ -884,7 +883,7 @@ function logoSVG(sz,op){
 
 
 // Asterisk note — words that appear without spaces in the grid
-const ASTERISK_WORDS = ['MAHAD SANID','NABAD GELYO','SOO DHAWOOW','ADEER','EEDDO','ABTI'];
+const ASTERISK_WORDS = ['INAABTI','INAADEER','ADEER','EEDDO','ABTI','HABARYAR','SHABEEL BADEED'];
 
 function wbank(puzzle){
   const hasAst = puzzle.display && puzzle.display.some(d => d && d.includes('*'));
