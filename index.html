@@ -143,29 +143,29 @@
   /* ── GRID ── */
   .grid-wrap{display:flex;justify-content:center;align-items:center;flex:1;padding-bottom:7px;}
   .grid-branded{position:relative;display:inline-block;}
-  /* TOP-LEFT corner stamp — on all grids */
+  /* Diagonal watermark overlay across the full grid */
   .grid-branded::before{
-    content:'© CILMI PRESS';
-    position:absolute;top:-1px;left:0px;
-    font-family:'Nunito',sans-serif;font-size:6.5px;font-weight:800;
-    letter-spacing:1.5px;text-transform:uppercase;
-    color:var(--terracotta);opacity:0.55;
-    background:var(--white);padding:1px 4px;
-    border-bottom:1px solid rgba(194,97,58,0.2);
-    border-right:1px solid rgba(194,97,58,0.2);
+    content:'stan.store/cilmipress   stan.store/cilmipress   stan.store/cilmipress   stan.store/cilmipress   stan.store/cilmipress   stan.store/cilmipress   stan.store/cilmipress   stan.store/cilmipress';
+    position:absolute;top:0;left:-40%;right:-40%;bottom:0;
+    font-family:'Nunito',sans-serif;font-size:9px;font-weight:800;
+    letter-spacing:3px;
+    color:rgba(194,97,58,0.11);
+    display:flex;align-items:center;justify-content:center;
+    word-break:break-all;word-spacing:24px;
+    transform:rotate(-32deg);
     z-index:6;pointer-events:none;
+    overflow:hidden;line-height:2.8;
+    white-space:normal;text-align:center;
   }
-  /* BOTTOM-RIGHT corner stamp — on all grids */
+  /* Small © stamp bottom-right corner */
   .grid-branded::after{
-    content:'© CILMI PRESS';
-    position:absolute;bottom:-1px;right:0px;
-    font-family:'Nunito',sans-serif;font-size:6.5px;font-weight:800;
-    letter-spacing:1.5px;text-transform:uppercase;
-    color:var(--terracotta);opacity:0.55;
-    background:var(--white);padding:1px 4px;
-    border-top:1px solid rgba(194,97,58,0.2);
-    border-left:1px solid rgba(194,97,58,0.2);
-    z-index:6;pointer-events:none;
+    content:'© cilmipress';
+    position:absolute;bottom:0px;right:0px;
+    font-family:'Nunito',sans-serif;font-size:6px;font-weight:800;
+    letter-spacing:1px;text-transform:lowercase;
+    color:var(--terracotta);opacity:0.4;
+    padding:1px 3px;
+    z-index:7;pointer-events:none;
   }
   /* ── WORD BANK ── */
   .wbank{background:var(--white);border:1.5px solid var(--border);border-top:3.5px solid var(--terracotta);
@@ -333,6 +333,169 @@
 </head>
 <body>
 
+<!-- PASSWORD WALL -->
+<div id="pw-wall" style="
+  position:fixed;top:0;left:0;right:0;bottom:0;z-index:99999;
+  background:#2C2825;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Nunito',sans-serif;
+  padding:24px;
+  overflow:hidden;
+">
+
+  <!-- Diagonal web link watermark across the whole background -->
+  <div style="
+    position:absolute;top:0;left:0;right:0;bottom:0;
+    display:flex;align-items:center;justify-content:center;
+    pointer-events:none;overflow:hidden;
+  ">
+    <div style="
+      white-space:nowrap;
+      font-size:13px;font-weight:800;
+      color:rgba(194,97,58,0.07);
+      letter-spacing:4px;
+      transform:rotate(-35deg) scaleX(1);
+      line-height:3.2;
+      width:200%;
+      text-align:center;
+      font-family:'Nunito',sans-serif;
+    ">
+      stan.store/cilmipress &nbsp;&nbsp;&nbsp; stan.store/cilmipress &nbsp;&nbsp;&nbsp; stan.store/cilmipress &nbsp;&nbsp;&nbsp; stan.store/cilmipress<br>
+      stan.store/cilmipress &nbsp;&nbsp;&nbsp; stan.store/cilmipress &nbsp;&nbsp;&nbsp; stan.store/cilmipress &nbsp;&nbsp;&nbsp; stan.store/cilmipress<br>
+      stan.store/cilmipress &nbsp;&nbsp;&nbsp; stan.store/cilmipress &nbsp;&nbsp;&nbsp; stan.store/cilmipress &nbsp;&nbsp;&nbsp; stan.store/cilmipress<br>
+      stan.store/cilmipress &nbsp;&nbsp;&nbsp; stan.store/cilmipress &nbsp;&nbsp;&nbsp; stan.store/cilmipress &nbsp;&nbsp;&nbsp; stan.store/cilmipress<br>
+      stan.store/cilmipress &nbsp;&nbsp;&nbsp; stan.store/cilmipress &nbsp;&nbsp;&nbsp; stan.store/cilmipress &nbsp;&nbsp;&nbsp; stan.store/cilmipress<br>
+      stan.store/cilmipress &nbsp;&nbsp;&nbsp; stan.store/cilmipress &nbsp;&nbsp;&nbsp; stan.store/cilmipress &nbsp;&nbsp;&nbsp; stan.store/cilmipress<br>
+      stan.store/cilmipress &nbsp;&nbsp;&nbsp; stan.store/cilmipress &nbsp;&nbsp;&nbsp; stan.store/cilmipress &nbsp;&nbsp;&nbsp; stan.store/cilmipress<br>
+      stan.store/cilmipress &nbsp;&nbsp;&nbsp; stan.store/cilmipress &nbsp;&nbsp;&nbsp; stan.store/cilmipress &nbsp;&nbsp;&nbsp; stan.store/cilmipress<br>
+      stan.store/cilmipress &nbsp;&nbsp;&nbsp; stan.store/cilmipress &nbsp;&nbsp;&nbsp; stan.store/cilmipress &nbsp;&nbsp;&nbsp; stan.store/cilmipress<br>
+    </div>
+  </div>
+
+  <div style="width:100%;max-width:360px;text-align:center;position:relative;z-index:2;">
+
+    <!-- Logo mark -->
+    <div style="margin-bottom:22px;">
+      <div style="
+        width:56px;height:56px;background:#C2613A;border-radius:12px;
+        display:inline-flex;align-items:center;justify-content:center;
+        margin-bottom:12px;
+      ">
+        <span style="font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:#FAF7F3;">C</span>
+      </div>
+      <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:#FAF7F3;letter-spacing:1px;">Eray Raadin</div>
+      <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.3);letter-spacing:2px;text-transform:uppercase;margin-top:4px;">Cilmi Press</div>
+    </div>
+
+    <!-- Thank you + welcome message -->
+    <div style="
+      background:rgba(194,97,58,0.1);border:1px solid rgba(194,97,58,0.2);
+      border-radius:12px;padding:16px 18px;margin-bottom:22px;text-align:left;
+    ">
+      <div style="font-size:15px;font-weight:900;color:#C2613A;margin-bottom:8px;">Thank you for your purchase 🎉</div>
+      <div style="font-size:12px;font-weight:700;color:rgba(255,255,255,0.55);line-height:1.8;">
+        You have just made a great decision. Inside you will find 15 bilingual Somali and English word search puzzles and 225 words — covering everything from family and food to animals, emotions and careers.<br><br>
+        Whether you fly through every puzzle or get completely stuck on one, you will be learning Somali without even realising it. Enjoy every moment of it, and share it with your family — elders and children alike. This was made for all of you.
+      </div>
+    </div>
+
+    <!-- Password prompt -->
+    <div style="font-size:13px;font-weight:700;color:rgba(255,255,255,0.4);margin-bottom:14px;line-height:1.6;">
+      Enter your access password to open the book.<br>
+      <span style="font-size:11px;color:rgba(255,255,255,0.25);">Check your confirmation email — type it exactly as written.</span>
+    </div>
+
+    <!-- Input — no placeholder -->
+    <input
+      id="pw-input"
+      type="password"
+      placeholder=""
+      autocomplete="off"
+      autocorrect="off"
+      autocapitalize="off"
+      spellcheck="false"
+      style="
+        width:100%;padding:14px 18px;
+        background:rgba(255,255,255,0.07);
+        border:1.5px solid rgba(255,255,255,0.12);
+        border-radius:12px;
+        color:#FAF7F3;font-size:18px;font-weight:700;
+        font-family:'Nunito',sans-serif;
+        text-align:center;letter-spacing:4px;
+        outline:none;margin-bottom:10px;
+      "
+    />
+
+    <!-- Error message -->
+    <div id="pw-error" style="
+      font-size:12px;font-weight:700;color:#C2613A;
+      margin-bottom:10px;min-height:18px;opacity:0;
+      transition:opacity 0.2s;
+    ">Incorrect — check your email and try again.</div>
+
+    <!-- Button -->
+    <button
+      id="pw-btn"
+      onclick="checkPassword()"
+      style="
+        width:100%;padding:15px;
+        background:#C2613A;border:none;border-radius:12px;
+        color:#FAF7F3;font-size:16px;font-weight:900;
+        font-family:'Nunito',sans-serif;
+        cursor:pointer;letter-spacing:0.5px;
+        transition:opacity 0.15s;
+      "
+    >Open my book →</button>
+
+    <!-- Buy link -->
+    <div style="margin-top:22px;font-size:11px;color:rgba(255,255,255,0.18);line-height:1.8;">
+      Don't have the book yet?<br>
+      <a href="https://stan.store/cilmipress" target="_blank" style="color:#C2613A;font-weight:800;text-decoration:none;">Get it at stan.store/cilmipress</a>
+    </div>
+
+  </div>
+</div>
+
+<script>
+(function(){
+  // Check if already unlocked this session
+  if(sessionStorage.getItem('er_unlocked')==='1'){
+    document.getElementById('pw-wall').style.display='none';
+  }
+  // Allow Enter key
+  document.addEventListener('DOMContentLoaded',function(){
+    var inp = document.getElementById('pw-input');
+    if(inp) inp.addEventListener('keydown',function(e){
+      if(e.key==='Enter') checkPassword();
+    });
+  });
+})();
+
+function checkPassword(){
+  var val = document.getElementById('pw-input').value;
+  // Exact match only — must be typed as ERAYRAADIN, nothing else accepted
+  var h = 0;
+  for(var i=0;i<val.length;i++){h=(Math.imul(31,h)+val.charCodeAt(i))|0;}
+  if(h === -1450313444 && val === 'ERAYRAADIN'){
+    sessionStorage.setItem('er_unlocked','1');
+    var wall = document.getElementById('pw-wall');
+    wall.style.transition='opacity 0.4s';
+    wall.style.opacity='0';
+    setTimeout(function(){wall.style.display='none';},400);
+  } else {
+    var err = document.getElementById('pw-error');
+    err.style.opacity='1';
+    var inp = document.getElementById('pw-input');
+    inp.style.borderColor='#C2613A';
+    inp.value='';
+    setTimeout(function(){
+      err.style.opacity='0';
+      inp.style.borderColor='rgba(255,255,255,0.12)';
+    },3000);
+  }
+}
+</script>
+
 <!-- Loading screen — shows instantly while puzzles generate -->
 
 
@@ -447,7 +610,7 @@
 
   <!-- Answers note on front cover -->
   <div style="margin:10px 20px 14px;background:rgba(194,97,58,0.08);border:1.5px solid rgba(194,97,58,0.35);border-radius:8px;padding:10px 14px;text-align:center;">
-    <div style="font-size:11px;font-weight:900;color:#C2613A;letter-spacing:0.5px;margin-bottom:3px;">📖 Answers are at the end of this book</div>
+    <div style="font-size:11px;font-weight:900;color:#C2613A;letter-spacing:0.5px;margin-bottom:3px;">📖 Answers are at the end of this book · Jawaabuhu waxay ku yaallaan dhammaadka buuggan</div>
     <div style="font-size:9.5px;font-weight:700;color:#8C7E74;line-height:1.5;">Try each puzzle honestly before checking — you are only cheating yourself.<br><span style="font-style:italic;">Isku day si daacad ah — haddaad xum-faliso, adiga ayaad u xum-falisay.</span></div>
   </div>
 
